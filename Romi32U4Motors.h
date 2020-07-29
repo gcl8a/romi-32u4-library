@@ -5,6 +5,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <FastGPIO.h>
 
 /*! \brief Controls motor speed and direction on the Romi 32U4.
  *
@@ -42,14 +43,14 @@ class Romi32U4Motors
      * \param speed A number from -300 to 300 representing the speed and
      * direction of the left motor.  Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
-    static void setLeftSpeed(int16_t speed);
+    static void setLeftEffort(int16_t speed);
 
     /** \brief Sets the speed for the right motor.
      *
      * \param speed A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
-    static void setRightSpeed(int16_t speed);
+    static void setRightEffort(int16_t speed);
 
     /** \brief Sets the speed for both motors.
      *
@@ -59,7 +60,7 @@ class Romi32U4Motors
      * \param rightSpeed A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
-    static void setSpeeds(int16_t leftSpeed, int16_t rightSpeed);
+    static void setEfforts(int16_t leftEffort, int16_t rightEffort);
 
     /** \brief Turns turbo mode on or off.
      *
@@ -91,7 +92,26 @@ class Romi32U4Motors
 
     static void init2();
 
-    static int16_t maxSpeed;
+    static int16_t maxEffort;
     static bool flipLeft;
     static bool flipRight;
 };
+
+// /*! \brief Controls motor speed and direction for a single motor on the Romi 32U4.
+//  *
+//  * This library uses Timer 1, so it will conflict with any other libraries using
+//  * that timer. */
+// template <uint8_t DIR, uint8_t PWM, uint8_t addr> class Romi32U4Motor
+// {
+//   private:
+//     FastGPIO::Pin<PWM> pwm;
+//     FastGPIO::Pin<DIR> dir;
+
+//   public:
+//     void SetEffort(int16_t effort)
+//     {
+//       if(effort < 0) {dir.setOutputHigh(); effort *= -1;}
+//       else {dir.setOutputLow();}
+//       _SFR_MEM16(addr) = abs(effort);
+//     }
+// };

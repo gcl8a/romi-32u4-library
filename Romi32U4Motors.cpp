@@ -12,7 +12,7 @@
 bool Romi32U4Motors::flipLeft = false;
 bool Romi32U4Motors::flipRight = false;
 
-int16_t Romi32U4Motors::maxSpeed = 400;
+int16_t Romi32U4Motors::maxEffort = 300;
 
 // initialize timer1 to generate the proper PWM outputs to the motor drivers
 void Romi32U4Motors::init2()
@@ -47,55 +47,55 @@ void Romi32U4Motors::flipRightMotor(bool flip)
     flipRight = flip;
 }
 
-void Romi32U4Motors::setLeftSpeed(int16_t speed)
+void Romi32U4Motors::setLeftEffort(int16_t effort)
 {
     init();
 
     bool reverse = 0;
 
-    if (speed < 0)
+    if (effort < 0)
     {
-        speed = -speed; // Make speed a positive quantity.
+        effort = -effort; // Make speed a positive quantity.
         reverse = 1;    // Preserve the direction.
     }
-    if (speed > maxSpeed)
+    if (effort > maxEffort)
     {
-        speed = maxSpeed;
+        effort = maxEffort;
     }
 
-    OCR1B = speed;
+    OCR1B = effort;
 
     FastGPIO::Pin<DIR_L>::setOutput(reverse ^ flipLeft);
 }
 
-void Romi32U4Motors::setRightSpeed(int16_t speed)
+void Romi32U4Motors::setRightEffort(int16_t effort)
 {
     init();
 
     bool reverse = 0;
 
-    if (speed < 0)
+    if (effort < 0)
     {
-        speed = -speed;  // Make speed a positive quantity.
+        effort = -effort;  // Make speed a positive quantity.
         reverse = 1;     // Preserve the direction.
     }
-    if (speed > maxSpeed)
+    if (effort > maxEffort)
     {
-        speed = maxSpeed;
+        effort = maxEffort;
     }
 
-    OCR1A = speed;
+    OCR1A = effort;
 
     FastGPIO::Pin<DIR_R>::setOutput(reverse ^ flipRight);
 }
 
-void Romi32U4Motors::setSpeeds(int16_t leftSpeed, int16_t rightSpeed)
+void Romi32U4Motors::setEfforts(int16_t leftEffort, int16_t rightEffort)
 {
-    setLeftSpeed(leftSpeed);
-    setRightSpeed(rightSpeed);
+    setLeftEffort(leftEffort);
+    setRightEffort(rightEffort);
 }
 
 void Romi32U4Motors::allowTurbo(bool turbo)
 {
-    maxSpeed = turbo ? 400 : 300;
+    maxEffort = turbo ? 400 : 300;
 }
