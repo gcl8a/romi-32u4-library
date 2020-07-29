@@ -79,7 +79,6 @@ static void nextNote();
 //       nextNote();
 //   }
 // }
-//adding a comment to try to figure out git...
 
 #else
 
