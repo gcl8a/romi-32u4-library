@@ -30,7 +30,7 @@ void Romi32U4Motors::init2()
     //
     // PWM frequency calculation
     // 16MHz / 1 (prescaler) / 2 (phase-correct) / 400 (top) = 20kHz
-    TCCR1A = 0b10101000; //gcl: added OCR1C
+    TCCR1A = 0b10101000; //gcl: added OCR1C for adding a third motor
     TCCR1B = 0b00010001;
     ICR1 = 400;
     OCR1A = 0;

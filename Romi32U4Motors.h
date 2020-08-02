@@ -54,10 +54,10 @@ class Romi32U4Motors
 
     /** \brief Sets the speed for both motors.
      *
-     * \param leftSpeed A number from -300 to 300 representing the speed and
+     * \param leftEffort A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward.
-     * \param rightSpeed A number from -300 to 300 representing the speed and
+     * \param rightEffort A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
     static void setEfforts(int16_t leftEffort, int16_t rightEffort);
