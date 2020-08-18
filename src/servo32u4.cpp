@@ -53,11 +53,11 @@ static void Servo32U4::Attach(void) //MUST USE PIN 6
 
     //check to make sure Timer4 is set up correctly
     //TODO: assert() ???
-    if(TCCR4B != 0x09) Serial.println("Warning! Incorrect servo timer: TCCR4B");
+    if(TCCR4B != 0x09) Serial.println("Warning! Incorrect timer prescaler: TCCR4B");
 
-    uint16_t ocr = OCR4D;
+    uint16_t ocr = OCR4C;
     ocr += TC4H << 8;
-    if(ocr != 999) Serial.println("Warning! Incorrect servo timer: TCCR4B");
+    if(ocr != 999) Serial.println("Warning! Incorrect timer TOP: TCCR4B");
 
     //technically, we should be sure not to clobber the high bits, but that won't happen
     //in this code
