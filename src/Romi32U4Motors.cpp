@@ -35,6 +35,9 @@ void Romi32U4Motors::init2()
     ICR1 = 400;
     OCR1A = 0;
     OCR1B = 0;
+
+    TIMSK0 |= (1 << OCIE0A); //enable OCR0 interrupt
+    OCR0A = 128; //stagger interrupt w.r.t. millis machinery
 }
 
 void Romi32U4Motors::flipLeftMotor(bool flip)

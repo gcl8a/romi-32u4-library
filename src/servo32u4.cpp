@@ -42,9 +42,6 @@ static void Servo32U4::Init(void)
     //this can be used for timing the PID loop -- but it belongs in the motor class
     //TIMSK4 = 0x04;
     //sbi(TIMSK4, TOIE4); //enable OVF interrupt
-
-    // sbi(TIMSK0, OCIE0A); //enable OCR0 interrupt
-    // OCR0A = 128; //stagger interrupt w.r.t. millis machinery
 }
 
 static void Servo32U4::Attach(void) //MUST USE PIN 6
