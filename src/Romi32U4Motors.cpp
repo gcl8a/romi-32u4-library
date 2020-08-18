@@ -36,8 +36,15 @@ void Romi32U4Motors::init2()
     OCR1A = 0;
     OCR1B = 0;
 
-    TIMSK0 |= (1 << OCIE0A); //enable OCR0 interrupt
-    OCR0A = 128; //stagger interrupt w.r.t. millis machinery
+    /*
+    * The following lines will enable a compare match interrupt on Timer0. Timer0 is used by Arduino
+    * for managing millis(), so it runs at ~1ms (actually 1024 us...long story). We don't want
+    * to break anything Arduino, so we set up OCR0A to raise an interrupt. In order to stagger
+    * the millis() machinery with our ISR, we set OCR0A to 128 -- any value other than 0 should
+    * work.
+    */
+    TIMSK0 |= (1 << OCIE0A);    //enable OCR0 interrupt
+    OCR0A = 128;                //stagger interrupt w.r.t. millis machinery
 }
 
 void Romi32U4Motors::flipLeftMotor(bool flip)
