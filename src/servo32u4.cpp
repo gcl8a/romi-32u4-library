@@ -14,7 +14,6 @@
  * Defaults to a range of 1000 - 2000 us, but can be customized.
  */ 
 
-#include <Arduino.h>
 #include <servo32u4.h>
 
 void Servo32U4::Init(void)
