@@ -17,7 +17,7 @@
 #include <Arduino.h>
 #include <servo32u4.h>
 
-static void Servo32U4::Init(void)
+void Servo32U4::Init(void)
 {
     cli();
     //set up timer 4
@@ -44,7 +44,7 @@ static void Servo32U4::Init(void)
     //sbi(TIMSK4, TOIE4); //enable OVF interrupt
 }
 
-static void Servo32U4::Attach(void) //MUST USE PIN 6
+void Servo32U4::Attach(void) //MUST USE PIN 6
 {
     cli();
 

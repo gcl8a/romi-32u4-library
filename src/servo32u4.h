@@ -1,7 +1,7 @@
 /*
  * A minimal class to control a servo on pin 6.
  * 
- * It uses output compare on Timer4 to control the pulse. The 10-bit Timer4 is set up (in Init()) 
+ * It uses output compare on Timer4 to control the pulse. The 10-bit Timer4 is set up in Init()
  * with a pre-scaler of 256, so 16 us resolution for the servo position (which is pretty fine, actually).
  * 
  * Upon request, I could figure out how to have 11-bit accuracy, or 8 us.
