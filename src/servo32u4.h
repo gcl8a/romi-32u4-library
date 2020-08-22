@@ -19,6 +19,8 @@ class Servo32U4
 private:
     uint16_t usMin = 1000;
     uint16_t usMax = 2000;
+
+    uint8_t feedbackPin = -1;
 public:
     static void Init(void);
     static void Attach(void); //MUST USE PIN 6
