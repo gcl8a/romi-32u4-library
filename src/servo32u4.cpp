@@ -49,7 +49,7 @@ void Servo32U4::Attach(void) //MUST USE PIN 6
     cli();
 
     //check to make sure Timer4 is set up correctly
-    //TODO: assert() ???
+    //TODO: assert() ??? I can't seem to get it to output an error; everything just kind of dies
     if(TCCR4B != 0x09) Serial.println("Warning! Incorrect timer prescaler: TCCR4B");
 
     uint16_t ocr = OCR4C;
@@ -85,7 +85,7 @@ void Servo32U4::Write(uint16_t microseconds)
 uint16_t Servo32U4::SetMinMaxUS(uint16_t min, uint16_t max)
 {
     usMin = min;
-    usMax = (max > min) ? max : min; //in case they're mixes up, just constrain to min
+    usMax = (max > min) ? max : min; //in case they're mixed up, just constrain to min
 
     return usMax - usMin; //return the range, in case the user wants to do a sanity check
 }
