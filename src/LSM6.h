@@ -89,6 +89,7 @@ class LSM6
 
     vector<int16_t> a; // accelerometer readings
     vector<int16_t> g; // gyro readings
+    vector<float> dps;
 
     uint8_t last_status; // status of last I2C transmission
 

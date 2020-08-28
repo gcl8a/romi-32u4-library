@@ -58,10 +58,18 @@ void loop()
   imu.read();
 
   snprintf_P(report, sizeof(report),
-    PSTR("A: %6d %6d %6d    G: %6d %6d %6d"),
+    PSTR("A: %6d %6d %6d    G: %6d %6d %6d   DPS: "),
     imu.a.x, imu.a.y, imu.a.z,
     imu.g.x, imu.g.y, imu.g.z);
-  Serial.println(report);
+    
+  Serial.print(report);
+
+    Serial.print(imu.dps.x);
+    Serial.print(' ');
+    Serial.print(imu.dps.x);
+    Serial.print(' ');
+    Serial.print(imu.dps.x);
+    Serial.print('\n');
 
   delay(100);
 }
