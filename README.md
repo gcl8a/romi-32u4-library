@@ -51,9 +51,9 @@ The main classes and functions provided by the library are listed below:
 * Romi32U4ButtonA
 * Romi32U4ButtonB
 * Romi32U4ButtonC
-* Romi32U4Buzzer
+* ~~Romi32U4Buzzer~~
 * Romi32U4Encoders
-* Romi32U4LCD
+* ~~Romi32U4LCD~~
 * Romi32U4Motors
 * ledRed()
 * ledGreen()
@@ -66,8 +66,8 @@ The main classes and functions provided by the library are listed below:
 This library also includes copies of several other Arduino libraries inside it which are used to help implement the classes and functions above.
 
 * [FastGPIO](https://github.com/pololu/fastgpio-arduino)
-* [PololuBuzzer](https://github.com/pololu/pololu-buzzer-arduino)
-* [PololuHD44780](https://github.com/pololu/pololu-hd44780-arduino)
+* ~~[PololuBuzzer](https://github.com/pololu/pololu-buzzer-arduino)
+* ~~[PololuHD44780](https://github.com/pololu/pololu-hd44780-arduino)
 * [Pushbutton](https://github.com/pololu/pushbutton-arduino)
 * [QTRSensors](https://github.com/pololu/qtr-sensors-arduino)
 * [USBPause](https://github.com/pololu/usb-pause-arduino)
