@@ -36,9 +36,9 @@ void setup()
 
 void loop()
 {
-  static uint8_t lastDisplayTime;
+  static uint32_t lastDisplayTime;
 
-  if ((uint8_t)(millis() - lastDisplayTime) >= 100)
+  if ((millis() - lastDisplayTime) >= 100)
   {
     lastDisplayTime = millis();
 
