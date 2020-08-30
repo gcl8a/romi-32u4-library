@@ -23,8 +23,6 @@
 #include <Romi32U4.h>
 
 Romi32U4Encoders encoders;
-Romi32U4LCD lcd;
-Romi32U4Buzzer buzzer;
 Romi32U4Motors motors;
 Romi32U4ButtonA buttonA;
 Romi32U4ButtonC buttonC;
@@ -55,48 +53,6 @@ void loop()
     bool errorLeft = encoders.checkErrorLeft();
     bool errorRight = encoders.checkErrorRight();
 
-    if(encoders.checkErrorLeft())
-    {
-      // An error occurred on the left encoder channel.
-      // Display it on the LCD for the next 10 iterations and
-      // also beep.
-      displayErrorLeftCountdown = 10;
-      buzzer.playFromProgramSpace(encoderErrorLeft);
-    }
-
-    if(encoders.checkErrorRight())
-    {
-      // An error occurred on the left encoder channel.
-      // Display it on the LCD for the next 10 iterations and
-      // also beep.
-      displayErrorRightCountdown = 10;
-      buzzer.playFromProgramSpace(encoderErrorRight);
-    }
-
-    // Update the LCD with encoder counts and error info.
-    lcd.clear();
-    lcd.print(countsLeft);
-    lcd.gotoXY(0, 1);
-    lcd.print(countsRight);
-
-    if (displayErrorLeftCountdown)
-    {
-      // Show an exclamation point on the first line to
-      // indicate an error from the left encoder.
-      lcd.gotoXY(7, 0);
-      lcd.print('!');
-      displayErrorLeftCountdown--;
-    }
-
-    if (displayErrorRightCountdown)
-    {
-      // Show an exclamation point on the second line to
-      // indicate an error from the left encoder.
-      lcd.gotoXY(7, 1);
-      lcd.print('!');
-      displayErrorRightCountdown--;
-    }
-
     // Send the information to the serial monitor also.
     snprintf_P(report, sizeof(report),
         PSTR("%6d %6d %1d %1d"),
@@ -106,14 +62,14 @@ void loop()
 
   if (buttonA.isPressed())
   {
-    motors.setSpeeds(300, 300);
+    motors.setEfforts(300, 300);
   }
   else if (buttonC.isPressed())
   {
-    motors.setSpeeds(-300, -300);
+    motors.setEfforts(-300, -300);
   }
   else
   {
-    motors.setSpeeds(0, 0);
+    motors.setEfforts(0, 0);
   }
 }
