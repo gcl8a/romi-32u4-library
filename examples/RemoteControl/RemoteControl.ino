@@ -56,9 +56,7 @@ bool messageActive = false;
 // timeout defined above.
 uint16_t lastMessageTimeMs = 0;
 
-Romi32U4LCD lcd;
 Romi32U4Motors motors;
-Romi32U4Buzzer buzzer;
 Romi32U4ButtonA buttonA;
 
 RemoteDecoder decoder;
@@ -80,9 +78,6 @@ bool irSensorRead()
 void setup()
 {
   irSensorInit();
-
-  lcd.clear();
-  lcd.print(F("Waiting"));
 }
 
 void loop()
@@ -149,12 +144,11 @@ void processRemoteEvents()
 
 void processRemoteMessage(const uint8_t * message)
 {
-  // Print the raw message on the first line of the LCD, in hex.
+  // Print the raw message on the first line of the SM, in hex.
   // The first two bytes are usually an address, and the third
   // byte is usually a command.  The last byte is supposed to be
   // the bitwise inverse of the third byte, and if that is the
   // case, then we don't print it.
-  lcd.clear();
   char buffer[9];
   if (message[2] + message[3] == 0xFF)
   {
@@ -166,16 +160,13 @@ void processRemoteMessage(const uint8_t * message)
     sprintf(buffer, "%02X%02X%02X%02X",
       message[0], message[1], message[2], message[3]);
   }
-  lcd.print(buffer);
-
-  // Go to the next line of the LCD.
-  lcd.gotoXY(0, 1);
+  Serial.print(buffer);
 
   // Make sure the address matches what we expect.
   if (message[0] != remoteAddressByte0 ||
     message[1] != remoteAddressByte1)
   {
-    lcd.print(F("bad addr"));
+    Serial.print(F("bad addr"));
     return;
   }
 
@@ -183,7 +174,7 @@ void processRemoteMessage(const uint8_t * message)
   // command byte.
   if (message[2] + message[3] != 0xFF)
   {
-    lcd.print(F("bad cmd"));
+    Serial.print(F("bad cmd"));
     return;
   }
 
@@ -197,94 +188,91 @@ void processRemoteCommand(uint8_t command)
   switch(command)
   {
   case remoteUp:
-    lcd.print(F("up"));
-    motors.setSpeeds(300, 300);
+    Serial.print(F("up"));
+    motors.setEfforts(300, 300);
     break;
 
   case remoteDown:
-    lcd.print(F("down"));
-    motors.setSpeeds(-300, -300);
+    Serial.print(F("down"));
+    motors.setEfforts(-300, -300);
     break;
 
   case remoteLeft:
-    lcd.print(F("left"));
-    motors.setSpeeds(-200, 200);
+    Serial.print(F("left"));
+    motors.setEfforts(-200, 200);
     break;
 
   case remoteRight:
-    lcd.print(F("right"));
-    motors.setSpeeds(200, -200);
+    Serial.print(F("right"));
+    motors.setEfforts(200, -200);
     break;
 
   case remoteStopMode:
-    lcd.print(F("stop"));
+    Serial.print(F("stop"));
     break;
 
   case remoteEnterSave:
-    lcd.print(F("enter"));
+    Serial.print(F("enter"));
     break;
 
   case remoteVolMinus:
-    lcd.print(F("vol-"));
+    Serial.print(F("vol-"));
     break;
 
   case remoteVolPlus:
-    lcd.print(F("vol+"));
+    Serial.print(F("vol+"));
     break;
 
   case remotePlayPause:
-    lcd.print(F("play"));
+    Serial.print(F("play"));
     break;
 
   case remoteSetup:
-    lcd.print(F("setup"));
+    Serial.print(F("setup"));
     break;
 
   case remoteBack:
-    lcd.print(F("back"));
+    Serial.print(F("back"));
     break;
 
   case remote0:
-    lcd.print(F("0"));
+    Serial.print(F("0"));
     break;
 
   case remote1:
-    lcd.print(F("1"));
-    buzzer.playNote(NOTE_C(4), 200, 15);
+    Serial.print(F("1"));
     break;
 
   case remote2:
-    lcd.print(F("2"));
-    buzzer.playNote(NOTE_D(4), 200, 15);
+    Serial.print(F("2"));
     break;
 
   case remote3:
-    lcd.print(F("3"));
-    buzzer.playNote(NOTE_E(4), 200, 15);
+    Serial.print(F("3"));
     break;
 
   case remote4:
-    lcd.print(F("4"));
+    Serial.print(F("4"));
     break;
 
   case remote5:
-    lcd.print(F("5"));
+    Serial.print(F("5"));
     break;
 
   case remote6:
-    lcd.print(F("6"));
+    Serial.print(F("6"));
     break;
 
   case remote7:
-    lcd.print(F("7"));
+    Serial.print(F("7"));
     break;
 
   case remote8:
-    lcd.print(F("8"));
+    Serial.print(F("8"));
     break;
 
   case remote9:
-    lcd.print(F("9"));
+    Serial.print(F("9"));
     break;
   }
 }
@@ -294,6 +282,5 @@ void processRemoteCommand(uint8_t command)
 // expired.
 void stopCurrentCommand()
 {
-  motors.setSpeeds(0, 0);
-  buzzer.stopPlaying();
+  motors.setEfforts(0, 0);
 }
