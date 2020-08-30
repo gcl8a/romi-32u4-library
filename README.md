@@ -35,7 +35,7 @@ If this does not work, you can manually install the library:
 
 Several example sketches are available that show how to use the library.  You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "Romi32U4".  If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
 
-# Not all examples have been converted to the wpi version of the library. At the moment only the following will run:
+### Not all examples have been converted to the wpi version of the library. At the moment only the following will run:
 
 * MotorTest
 * Encoders
