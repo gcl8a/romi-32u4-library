@@ -25,5 +25,5 @@ extern int16_t turnRate;
 
 // These objects must be defined in your sketch.
 extern Romi32U4ButtonA buttonA;
-extern Romi32U4LCD lcd;
+//extern Romi32U4LCD lcd;
 extern LSM6 imu;

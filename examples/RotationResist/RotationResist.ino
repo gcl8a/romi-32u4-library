@@ -35,7 +35,6 @@
 
 const int16_t maxSpeed = 300;
 
-Romi32U4LCD lcd;
 Romi32U4ButtonA buttonA;
 Romi32U4Motors motors;
 LSM6 imu;
@@ -45,11 +44,6 @@ void setup()
   turnSensorSetup();
   delay(500);
   turnSensorReset();
-
-  lcd.clear();
-  lcd.print(F("Try to"));
-  lcd.gotoXY(0, 1);
-  lcd.print(F("turn me!"));
 }
 
 void loop()
@@ -69,5 +63,5 @@ void loop()
   // -maxSpeed and maxSpeed.
   turnSpeed = constrain(turnSpeed, -maxSpeed, maxSpeed);
 
-  motors.setSpeeds(-turnSpeed, turnSpeed);
+  motors.setEfforts(-turnSpeed, turnSpeed);
 }
