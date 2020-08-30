@@ -18,6 +18,8 @@
 #include <Romi32U4Encoders.h>
 #include <Romi32U4Motors.h>
 
+#include <Wire.h>
+
 /*! \brief Turns the red user LED (RX) on or off.
 
 @param on 1 to turn on the LED, 0 to turn it off.
