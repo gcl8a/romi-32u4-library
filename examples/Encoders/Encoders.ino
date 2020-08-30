@@ -27,9 +27,6 @@ Romi32U4Motors motors;
 Romi32U4ButtonA buttonA;
 Romi32U4ButtonC buttonC;
 
-const char encoderErrorLeft[] PROGMEM = "!<c2";
-const char encoderErrorRight[] PROGMEM = "!<e2";
-
 char report[80];
 
 void setup()
