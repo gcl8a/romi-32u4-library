@@ -1,5 +1,5 @@
-#include <LSM6.h>
 #include <Wire.h>
+#include <LSM6.h>
 #include <math.h>
 
 // Defines ////////////////////////////////////////////////////////////////

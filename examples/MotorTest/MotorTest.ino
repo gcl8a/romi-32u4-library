@@ -24,12 +24,12 @@ void loop()
   ledYellow(1);
   for (int speed = 0; speed <= 400; speed++)
   {
-    motors.setLeftSpeed(speed);
+    motors.setLeftEffort(speed);
     delay(2);
   }
   for (int speed = 400; speed >= 0; speed--)
   {
-    motors.setLeftSpeed(speed);
+    motors.setLeftEffort(speed);
     delay(2);
   }
 
@@ -37,12 +37,12 @@ void loop()
   ledYellow(0);
   for (int speed = 0; speed >= -400; speed--)
   {
-    motors.setLeftSpeed(speed);
+    motors.setLeftEffort(speed);
     delay(2);
   }
   for (int speed = -400; speed <= 0; speed++)
   {
-    motors.setLeftSpeed(speed);
+    motors.setLeftEffort(speed);
     delay(2);
   }
 
@@ -50,12 +50,12 @@ void loop()
   ledYellow(1);
   for (int speed = 0; speed <= 400; speed++)
   {
-    motors.setRightSpeed(speed);
+    motors.setRightEffort(speed);
     delay(2);
   }
   for (int speed = 400; speed >= 0; speed--)
   {
-    motors.setRightSpeed(speed);
+    motors.setRightEffort(speed);
     delay(2);
   }
 
@@ -63,12 +63,12 @@ void loop()
   ledYellow(0);
   for (int speed = 0; speed >= -400; speed--)
   {
-    motors.setRightSpeed(speed);
+    motors.setRightEffort(speed);
     delay(2);
   }
   for (int speed = -400; speed <= 0; speed++)
   {
-    motors.setRightSpeed(speed);
+    motors.setRightEffort(speed);
     delay(2);
   }
 
