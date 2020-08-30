@@ -18,7 +18,7 @@
 #include <Romi32U4Encoders.h>
 #include <Romi32U4Motors.h>
 
-#include <Wire.h>
+#include <Wire.h> //not used in many codes, but platformio balks without it, since it scans the IMU library
 
 /*! \brief Turns the red user LED (RX) on or off.
 
