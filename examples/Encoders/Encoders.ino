@@ -37,8 +37,6 @@ void setup()
 void loop()
 {
   static uint8_t lastDisplayTime;
-  static uint8_t displayErrorLeftCountdown = 0;
-  static uint8_t displayErrorRightCountdown = 0;
 
   if ((uint8_t)(millis() - lastDisplayTime) >= 100)
   {
