@@ -43,6 +43,58 @@ uint16_t LSM6::getTimeout()
   return io_timeout;
 }
 
+
+void LSM6::setFullScaleGyro(GYRO_FS gfs)
+{
+  switch (gfs)
+  {
+    case GYRO_FS245:
+      writeReg(LSM6::CTRL2_G, 0b10000000);
+      mdps = 8.75;
+      break;
+    case GYRO_FS500:
+      writeReg(LSM6::CTRL2_G, 0b10000100);
+      mdps = 17.5;
+      break;
+    case GYRO_FS1000:
+      writeReg(LSM6::CTRL2_G, 0b10001000);
+      mdps = 35;
+      break;
+    case GYRO_FS2000:
+      writeReg(LSM6::CTRL2_G, 0b10001100);
+      mdps = 70;
+      break;
+    default:
+      Serial.println("Error setting gyro sensitivity!");
+  }
+}
+
+void LSM6::setFullScaleAcc(ACC_FS afs)
+{
+  switch (afs)
+  {
+    case ACC_FS2:
+      writeReg(LSM6::CTRL1_XL, 0b10000000);
+      mg = 0.061;
+      break;
+    case ACC_FS4:
+      writeReg(LSM6::CTRL1_XL, 0b10001000); //datasheet in error here?
+      mg = 0.122;
+      break;
+    case ACC_FS8:
+      writeReg(LSM6::CTRL1_XL, 0b10001100);
+      mg = 0.244;
+      break;
+    case ACC_FS16:
+      writeReg(LSM6::CTRL1_XL, 0b10000100);
+      mg = 0.488;
+      break;
+    default:
+      Serial.println("Error setting acc sensitivity!");
+  }
+}
+
+
 bool LSM6::init(deviceType device, sa0State sa0)
 {
   // perform auto-detection unless device type and SA0 state were both specified
@@ -103,14 +155,15 @@ void LSM6::enableDefault(void)
 
     // 0x80 = 0b10000000
     // ODR = 1000 (1.66 kHz (high performance)); FS_XL = 00 (+/-2 g full scale)
-    writeReg(CTRL1_XL, 0x80);
+    //writeReg(CTRL1_XL, 0x80);
+    setFullScaleAcc(ACC_FS2);
 
     // Gyro
 
     // 0x80 = 0b010000000
     // ODR = 1000 (1.66 kHz (high performance)); FS_XL = 00 (245 dps)
-    writeReg(CTRL2_G, 0x80);
-
+    //writeReg(CTRL2_G, 0x80);
+    setFullScaleGyro(GYRO_FS245);
     // Common
 
     // 0x04 = 0b00000100
@@ -202,9 +255,9 @@ void LSM6::readGyro(void)
   g.y = (int16_t)(yhg << 8 | ylg);
   g.z = (int16_t)(zhg << 8 | zlg);
 
-  dps.x = g.x * 8.75e-3;
-  dps.y = g.x * 8.75e-3;
-  dps.z = g.x * 8.75e-3;
+  dps.x = g.x * mdps / 1000.;
+  dps.y = g.y * mdps / 1000.;
+  dps.z = g.z * mdps / 1000.;
 }
 
 // Reads all 6 channels of the LSM6 and stores them in the object variables

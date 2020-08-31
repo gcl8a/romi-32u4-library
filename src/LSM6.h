@@ -14,6 +14,9 @@ class LSM6
     enum deviceType { device_DS33, device_auto };
     enum sa0State { sa0_low, sa0_high, sa0_auto };
 
+    enum ACC_FS {ACC_FS2, ACC_FS4, ACC_FS8, ACC_FS16};
+    enum GYRO_FS {GYRO_FS245, GYRO_FS500, GYRO_FS1000, GYRO_FS2000};
+
     // register addresses
     enum regAddr
     {
@@ -91,6 +94,10 @@ class LSM6
     vector<int16_t> g; // gyro readings
     vector<float> dps;
 
+    //conversion factors
+    float mdps = 0;
+    float mg = 0;
+
     uint8_t last_status; // status of last I2C transmission
 
     LSM6(void);
@@ -100,13 +107,17 @@ class LSM6
 
     void enableDefault(void);
 
-
+private:
     void writeReg(uint8_t reg, uint8_t value);
     uint8_t readReg(uint8_t reg);
 
+public:
     void readAcc(void);
     void readGyro(void);
     void read(void);
+
+    void setFullScaleGyro(GYRO_FS gfs);
+    void setFullScaleAcc(ACC_FS afs);
 
     void setTimeout(uint16_t timeout);
     uint16_t getTimeout(void);
