@@ -8,19 +8,13 @@
 Romi32U4ButtonA buttonA;
 Romi32U4ButtonB buttonB;
 Romi32U4ButtonC buttonC;
-Romi32U4LCD lcd;
 
 void setup()
 {
-  lcd.clear();
-  lcd.print(F("Press A"));
-
   // Method 1: Use the waitForButton() function, which blocks and
   // doesn't return until a button press and release are
   // detected. This function takes care of button debouncing.
   buttonA.waitForButton();
-
-  lcd.clear();
 }
 
 void loop()
@@ -51,9 +45,6 @@ void loop()
     Serial.print(F("Button C was pressed "));
     Serial.print(cPressedCount);
     Serial.println(F(" times."));
-
-    lcd.clear();
-    lcd.print(cPressedCount);
   }
 
   // If you use non-blocking functions like isPressed() and
