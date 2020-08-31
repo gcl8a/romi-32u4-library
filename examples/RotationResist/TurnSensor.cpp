@@ -45,7 +45,7 @@ void turnSensorSetup()
 
   // Set the gyro full scale to 1000 dps because the default
   // value is too low, and leave the other settings the same.
-  imu.writeReg(LSM6::CTRL2_G, 0b10001000);
+  imu.setFullScaleGyro(LSM6::GYRO_FS1000);
 
   // Turn on the yellow LED in case the LCD is not available.
   ledYellow(1);
@@ -58,7 +58,7 @@ void turnSensorSetup()
   for (uint16_t i = 0; i < 1024; i++)
   {
     // Wait for new data to be available, then read it.
-    while(!imu.readReg(LSM6::STATUS_REG) & 0x08);
+    while(!imu.getStatus() & 0x08); //should be moved to the library
     imu.read();
 
     // Add the Z axis reading to the total.

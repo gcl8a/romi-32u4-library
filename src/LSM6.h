@@ -123,6 +123,8 @@ public:
     uint16_t getTimeout(void);
     bool timeoutOccurred(void);
 
+    uint8_t getStatus(void) {return readReg(LSM6::STATUS_REG);}
+
     // vector functions
     template <typename Ta, typename Tb, typename To> static void vector_cross(const vector<Ta> *a, const vector<Tb> *b, vector<To> *out);
     template <typename Ta, typename Tb> static float vector_dot(const vector<Ta> *a, const vector<Tb> *b);
