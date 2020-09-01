@@ -15,6 +15,8 @@ void setup()
   // doesn't return until a button press and release are
   // detected. This function takes care of button debouncing.
   buttonA.waitForButton();
+
+  Serial.println("A");
 }
 
 void loop()
