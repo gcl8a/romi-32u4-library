@@ -42,7 +42,8 @@ Several example sketches are available that show how to use the library.  You ca
 * IMU
 * RotationResist (this one is fun!)
 * RemoteControl will compile, but has not been tested
-* Blink and Buttons will likely run, but are untested
+* Buttons
+* Blink will likely run, but is untested
 
 ## Classes and functions
 
