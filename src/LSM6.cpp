@@ -46,22 +46,24 @@ uint16_t LSM6::getTimeout()
 
 void LSM6::setFullScaleGyro(GYRO_FS gfs)
 {
+  uint8_t settings = readReg(LSM6::CTRL2_G);
+  settings &= 0xf0; //clear sensitivity bits; can't use 125 setting
   switch (gfs)
   {
     case GYRO_FS245:
-      writeReg(LSM6::CTRL2_G, 0b10000000);
+      writeReg(LSM6::CTRL2_G, settings | 0b10000000);
       mdps = 8.75;
       break;
     case GYRO_FS500:
-      writeReg(LSM6::CTRL2_G, 0b10000100);
+      writeReg(LSM6::CTRL2_G, settings | 0b10000100);
       mdps = 17.5;
       break;
     case GYRO_FS1000:
-      writeReg(LSM6::CTRL2_G, 0b10001000);
+      writeReg(LSM6::CTRL2_G, settings | 0b10001000);
       mdps = 35;
       break;
     case GYRO_FS2000:
-      writeReg(LSM6::CTRL2_G, 0b10001100);
+      writeReg(LSM6::CTRL2_G, settings | 0b10001100);
       mdps = 70;
       break;
     default:
@@ -91,6 +93,26 @@ void LSM6::setFullScaleAcc(ACC_FS afs)
       break;
     default:
       Serial.println("Error setting acc sensitivity!");
+  }
+}
+
+
+void LSM6::setGyroDataOutputRate(GYRO_ODR rate)
+{
+  uint8_t settings = readReg(LSM6::CTRL2_G);
+  settings &= 0x0f; //clear ODR bits
+  switch (rate)
+  {
+    case GYRO_ODR52:
+      writeReg(LSM6::CTRL2_G, settings | 0x30);
+      odrGyro = 52;
+      break;
+    case GYRO_ODR104:
+      writeReg(LSM6::CTRL2_G, settings | 0x40);
+      odrGyro = 104;
+      break;
+    default:
+      Serial.println("Error setting gyro data rate!");
   }
 }
 

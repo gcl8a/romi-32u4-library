@@ -47,6 +47,7 @@ void setup()
   // Set the gyro full scale to 1000 dps because the default
   // value is too low, and leave the other settings the same.
   imu.setFullScaleGyro(LSM6::GYRO_FS1000);
+  imu.setGyroDataOutputRate(LSM6::GYRO_ODR52);
 
   // Set the accelerometer full scale to 16 g because the default
   // value is too low, and leave the other settings the same.
@@ -55,21 +56,24 @@ void setup()
 
 void loop()
 {
-  imu.read();
+  if(imu.getStatus() & 0x02)
+  {
+    imu.read();
 
-  snprintf_P(report, sizeof(report),
-    PSTR("A: %6d %6d %6d    G: %6d %6d %6d   DPS: "),
-    imu.a.x, imu.a.y, imu.a.z,
-    imu.g.x, imu.g.y, imu.g.z);
-    
-  Serial.print(report);
+    snprintf_P(report, sizeof(report),
+      PSTR("A: %6d %6d %6d    G: %6d %6d %6d   DPS: "),
+      imu.a.x, imu.a.y, imu.a.z,
+      imu.g.x, imu.g.y, imu.g.z);
+      
+      Serial.print(millis());
+      Serial.print('\t');
+      Serial.print(report);
 
-    Serial.print(imu.dps.x);
-    Serial.print(' ');
-    Serial.print(imu.dps.y);
-    Serial.print(' ');
-    Serial.print(imu.dps.z);
-    Serial.print('\n');
-
-  delay(100);
+      Serial.print(imu.dps.x);
+      Serial.print(' ');
+      Serial.print(imu.dps.y);
+      Serial.print(' ');
+      Serial.print(imu.dps.z);
+      Serial.print('\n');
+  }
 }
