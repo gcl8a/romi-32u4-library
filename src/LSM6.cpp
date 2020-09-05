@@ -7,11 +7,11 @@
 // The Arduino two-wire interface uses a 7-bit number for the address,
 // and sets the last bit correctly based on reads and writes
 #define DS33_SA0_HIGH_ADDRESS 0b1101011
-#define DS33_SA0_LOW_ADDRESS  0b1101010
+#define DS33_SA0_LOW_ADDRESS 0b1101010
 
 #define TEST_REG_ERROR -1
 
-#define DS33_WHO_ID    0x69
+#define DS33_WHO_ID 0x69
 
 // Constructors ////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ LSM6::LSM6(void)
 {
   _device = device_auto;
 
-  io_timeout = 0;  // 0 = no timeout
+  io_timeout = 0; // 0 = no timeout
   did_timeout = false;
 }
 
@@ -43,31 +43,30 @@ uint16_t LSM6::getTimeout()
   return io_timeout;
 }
 
-
 void LSM6::setFullScaleGyro(GYRO_FS gfs)
 {
   uint8_t settings = readReg(LSM6::CTRL2_G);
   settings &= 0xf0; //clear sensitivity bits; can't use 125 setting
   switch (gfs)
   {
-    case GYRO_FS245:
-      writeReg(LSM6::CTRL2_G, settings | 0b10000000);
-      mdps = 8.75;
-      break;
-    case GYRO_FS500:
-      writeReg(LSM6::CTRL2_G, settings | 0b10000100);
-      mdps = 17.5;
-      break;
-    case GYRO_FS1000:
-      writeReg(LSM6::CTRL2_G, settings | 0b10001000);
-      mdps = 35;
-      break;
-    case GYRO_FS2000:
-      writeReg(LSM6::CTRL2_G, settings | 0b10001100);
-      mdps = 70;
-      break;
-    default:
-      Serial.println("Error setting gyro sensitivity!");
+  case GYRO_FS245:
+    writeReg(LSM6::CTRL2_G, settings | 0b10000000);
+    mdps = 8.75;
+    break;
+  case GYRO_FS500:
+    writeReg(LSM6::CTRL2_G, settings | 0b10000100);
+    mdps = 17.5;
+    break;
+  case GYRO_FS1000:
+    writeReg(LSM6::CTRL2_G, settings | 0b10001000);
+    mdps = 35;
+    break;
+  case GYRO_FS2000:
+    writeReg(LSM6::CTRL2_G, settings | 0b10001100);
+    mdps = 70;
+    break;
+  default:
+    Serial.println("Error setting gyro sensitivity!");
   }
 }
 
@@ -75,27 +74,26 @@ void LSM6::setFullScaleAcc(ACC_FS afs)
 {
   switch (afs)
   {
-    case ACC_FS2:
-      writeReg(LSM6::CTRL1_XL, 0b10000000);
-      mg = 0.061;
-      break;
-    case ACC_FS4:
-      writeReg(LSM6::CTRL1_XL, 0b10001000); //datasheet in error here?
-      mg = 0.122;
-      break;
-    case ACC_FS8:
-      writeReg(LSM6::CTRL1_XL, 0b10001100);
-      mg = 0.244;
-      break;
-    case ACC_FS16:
-      writeReg(LSM6::CTRL1_XL, 0b10000100);
-      mg = 0.488;
-      break;
-    default:
-      Serial.println("Error setting acc sensitivity!");
+  case ACC_FS2:
+    writeReg(LSM6::CTRL1_XL, 0b10000000);
+    mg = 0.061;
+    break;
+  case ACC_FS4:
+    writeReg(LSM6::CTRL1_XL, 0b10001000); //datasheet in error here?
+    mg = 0.122;
+    break;
+  case ACC_FS8:
+    writeReg(LSM6::CTRL1_XL, 0b10001100);
+    mg = 0.244;
+    break;
+  case ACC_FS16:
+    writeReg(LSM6::CTRL1_XL, 0b10000100);
+    mg = 0.488;
+    break;
+  default:
+    Serial.println("Error setting acc sensitivity!");
   }
 }
-
 
 void LSM6::setGyroDataOutputRate(GYRO_ODR rate)
 {
@@ -103,19 +101,18 @@ void LSM6::setGyroDataOutputRate(GYRO_ODR rate)
   settings &= 0x0f; //clear ODR bits
   switch (rate)
   {
-    case GYRO_ODR52:
-      writeReg(LSM6::CTRL2_G, settings | 0x30);
-      odrGyro = 52;
-      break;
-    case GYRO_ODR104:
-      writeReg(LSM6::CTRL2_G, settings | 0x40);
-      odrGyro = 104;
-      break;
-    default:
-      Serial.println("Error setting gyro data rate!");
+  case GYRO_ODR52:
+    writeReg(LSM6::CTRL2_G, settings | 0x30);
+    odrGyro = 52;
+    break;
+  case GYRO_ODR104:
+    writeReg(LSM6::CTRL2_G, settings | 0x40);
+    odrGyro = 104;
+    break;
+  default:
+    Serial.println("Error setting gyro data rate!");
   }
 }
-
 
 bool LSM6::init(deviceType device, sa0State sa0)
 {
@@ -129,13 +126,19 @@ bool LSM6::init(deviceType device, sa0State sa0)
       if (sa0 != sa0_low && testReg(DS33_SA0_HIGH_ADDRESS, WHO_AM_I) == DS33_WHO_ID)
       {
         sa0 = sa0_high;
-        if (device == device_auto) { device = device_DS33; }
+        if (device == device_auto)
+        {
+          device = device_DS33;
+        }
       }
       // check SA0 low address unless SA0 was specified to be high
       else if (sa0 != sa0_high && testReg(DS33_SA0_LOW_ADDRESS, WHO_AM_I) == DS33_WHO_ID)
       {
         sa0 = sa0_low;
-        if (device == device_auto) { device = device_DS33; }
+        if (device == device_auto)
+        {
+          device = device_DS33;
+        }
       }
     }
 
@@ -150,9 +153,10 @@ bool LSM6::init(deviceType device, sa0State sa0)
 
   switch (device)
   {
-    case device_DS33:
-      address = (sa0 == sa0_high) ? DS33_SA0_HIGH_ADDRESS : DS33_SA0_LOW_ADDRESS;
-      break;
+  case device_DS33:
+    address = (sa0 == sa0_high) ? DS33_SA0_HIGH_ADDRESS : DS33_SA0_LOW_ADDRESS;
+    break;
+  default:;
   }
 
   return true;
@@ -226,7 +230,8 @@ void LSM6::readAcc(void)
   Wire.requestFrom(address, (uint8_t)6);
 
   uint16_t millis_start = millis();
-  while (Wire.available() < 6) {
+  while (Wire.available() < 6)
+  {
     if (io_timeout > 0 && ((uint16_t)millis() - millis_start) > io_timeout)
     {
       did_timeout = true;
@@ -257,7 +262,8 @@ void LSM6::readGyro(void)
   Wire.requestFrom(address, (uint8_t)6);
 
   uint16_t millis_start = millis();
-  while (Wire.available() < 6) {
+  while (Wire.available() < 6)
+  {
     if (io_timeout > 0 && ((uint16_t)millis() - millis_start) > io_timeout)
     {
       did_timeout = true;
