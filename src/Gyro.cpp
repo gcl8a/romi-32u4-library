@@ -19,21 +19,24 @@ void Gyro::setup()
   imu.setFullScaleGyro(LSM6::GYRO_FS1000);
   imu.setGyroDataOutputRate(LSM6::GYRO_ODR104);
 
+  // Sample the z velocities
+  long sum = 0;
+  int samples = 2000;
+  for (int i = 0; i < samples; i++)
+  {
+    while ((imu.getStatus() & 0x02) == 0)
+      ;
+    imu.readGyro();
+    sum += imu.g.z;
+  }
+  average = sum / samples;
+  imu.setGyroDataOutputRate(LSM6::GYRO_ODR52);
+
   reset();
 }
 
 void Gyro::reset()
 {
-  // Sample the z velocities
-  long sum = 0;
-  int samples = 2001;
-  for (int i = 0; i < samples; i++)
-  {
-    imu.readGyro();
-    sum += imu.g.z;
-    delay(10);
-  }
-  average = sum / samples;
   heading = 0.0;
   gyroTimer = millis() + 10;
   lastTime = 0;
