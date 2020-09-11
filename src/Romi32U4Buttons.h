@@ -76,4 +76,3 @@ public:
         return !FastGPIO::Pin<ROMI_32U4_BUTTON_C>::isInputHigh();
     }
 };
-

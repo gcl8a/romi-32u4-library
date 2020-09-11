@@ -17,6 +17,7 @@
 #include <Romi32U4Buttons.h>
 #include <Romi32U4Encoders.h>
 #include <Romi32U4Motors.h>
+#include <pcint.h>
 
 #include <Wire.h> //not used in many codes, but platformio balks without it, since it scans the IMU library
 

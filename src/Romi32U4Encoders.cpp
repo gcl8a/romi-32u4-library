@@ -5,6 +5,8 @@
 #include <avr/interrupt.h>
 #include <Arduino.h>
 
+#include <pcint.h>
+
 #define LEFT_XOR   8
 #define LEFT_B     IO_E2
 #define RIGHT_XOR  7
@@ -55,26 +57,6 @@ static void rightISR()
     lastRightB = newRightB;
 }
 
-typedef void(*PCISR)(); //function pointer
-PCISR pcISR[] = {0, 0, 0, 0, 0, 0, 0, 0}; //initialize array to null
-
-void attachPCInt(uint8_t pcInt, void (*pcisr)(void))
-{
-    cli();
-    PCMSK0 = (1 << pcInt); //enable PCInt
-    pcISR[pcInt] = pcisr;  //register the ISR
-    sei();
-}
-
-ISR(PCINT0_vect)
-{
-    static volatile uint8_t lastB = PORTB;
-    volatile uint8_t portB = PORTB;
-    volatile uint8_t deltaB = portB ^ lastB;
-
-    if(deltaB & (1 << PCINT4)) pcISR[PCINT4]();
-}
-
 void Romi32U4Encoders::init2()
 {
     // Set the pins as pulled-up inputs.
@@ -83,11 +65,7 @@ void Romi32U4Encoders::init2()
     FastGPIO::Pin<RIGHT_XOR>::setInputPulledUp();
     FastGPIO::Pin<RIGHT_B>::setInputPulledUp();
 
-    // Enable pin-change interrupt on PB4 for left encoder, and disable other
-    // pin-change interrupts.
-    PCICR = (1 << PCIE0);
-    //PCMSK0 = (1 << PCINT4);
-    PCIFR = (1 << PCIF0);  // Clear its interrupt flag by writing a 1.
+    attachPCInt(PCINT4, leftISR);
 
     // Enable interrupt on PE6 for the right encoder.  We use attachInterrupt
     // instead of defining ISR(INT6_vect) ourselves so that this class will be
