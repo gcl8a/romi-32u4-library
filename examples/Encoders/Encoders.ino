@@ -29,9 +29,15 @@ Romi32U4ButtonC buttonC;
 
 char report[80];
 
+volatile static uint8_t buttonAcount = 0;
+void buttonAisr(void)
+{
+  buttonAcount++;
+}
+
 void setup()
 {
-
+  attachPCInt(PCINT3, buttonAisr);
 }
 
 void loop()
@@ -50,8 +56,8 @@ void loop()
 
     // Send the information to the serial monitor also.
     snprintf_P(report, sizeof(report),
-        PSTR("%6d %6d %1d %1d"),
-        countsLeft, countsRight, errorLeft, errorRight);
+        PSTR("%6d %6d %1d %1d %4d"),
+        countsLeft, countsRight, errorLeft, errorRight, buttonAcount);
     Serial.println(report);
   }
 
