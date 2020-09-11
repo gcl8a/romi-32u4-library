@@ -65,6 +65,7 @@ void Romi32U4Encoders::init2()
     FastGPIO::Pin<RIGHT_XOR>::setInputPulledUp();
     FastGPIO::Pin<RIGHT_B>::setInputPulledUp();
 
+    //attach a PC interrupt
     attachPCInt(PCINT4, leftISR);
 
     // Enable interrupt on PE6 for the right encoder.  We use attachInterrupt
