@@ -1,9 +1,9 @@
 // Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
 
+#include <Arduino.h>
 #include <Romi32U4Encoders.h>
 #include <FastGPIO.h>
 #include <avr/interrupt.h>
-#include <Arduino.h>
 
 #include <pcint.h>
 
