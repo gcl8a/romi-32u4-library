@@ -51,7 +51,7 @@ Accessing exmaples in platformio is a little trickier than Arduino. Because plat
  * Copy-paste from the dynamic library. Start a new project with a skeleton main.cpp. Include the library as describe above in Installing the Library. Build the skeleton project. Within your project tree, navigate to .pio/lib_deps/examples and copy-paste the relevant example into your main.cpp. You can have multiple projects (folders) in a single workspace, which might make accessing additional libraries easier.
  * Clone the repo to your machine. Be sure to clone the latest release, otherwise you will get a dev version. It is still better to reference the library dynamically in your platformio.ini file (see above under Installing the Library).
  * Copy-paste from the github repo. A little dangerous, since you might get an example that relies on later commits.
- * Install the library (say, using Arduino) and then use the "Import Arduino Project " option in platformio.
+ * Install the library (say, using Arduino) and then use the "Import Arduino Project " option in platformio. Do *not* check the "Use libraries installed by Arduino" option.
 
 ## Examples (Arduino)
 
