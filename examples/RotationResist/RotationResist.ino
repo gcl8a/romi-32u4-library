@@ -30,7 +30,6 @@
 
 #include <Wire.h>
 #include <Romi32U4.h>
-#include <LSM6.h>
 #include "TurnSensor.h"
 
 const int16_t maxSpeed = 300;

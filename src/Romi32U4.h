@@ -20,6 +20,7 @@
 #include <pcint.h>
 
 #include <Wire.h> //not used in many codes, but platformio balks without it, since it scans the IMU library
+#include <LSM6.h>
 
 /*! \brief Turns the red user LED (RX) on or off.
 

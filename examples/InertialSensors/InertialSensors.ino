@@ -19,9 +19,7 @@
 //
 // https://github.com/pololu/lsm6-arduino
 
-#include <Wire.h>
 #include <Romi32U4.h>
-#include <LSM6.h>
 
 LSM6 imu;
 
