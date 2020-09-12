@@ -1,9 +1,8 @@
-# Romi32U4 library
+# wpi-32u4-library library
 
-Version: 1.0.2<br/>
-Release date: 2017-07-17<br/>
-[![Build Status](https://travis-ci.org/pololu/romi-32u4-arduino-library.svg?branch=master)](https://travis-ci.org/pololu/romi-32u4-arduino-library)<br/>
-[www.pololu.com](https://www.pololu.com/)
+Version: 2.1.0<br/>
+Release date: 2020-09-06<br/>
+Forked from [www.pololu.com](https://www.pololu.com/)
 
 ## Summary
 
@@ -11,29 +10,27 @@ This is a C++ library for the Arduino IDE that helps access the on-board hardwar
 
 The Romi 32U4 Control Board turns the Romi chassis into a programmable, Arduino-compatible robot.  It has an integrated AVR ATmega32U4 microcontroller, motor drivers, encoders, buzzer, buttons, and an LSM6DS33 accelerometer and gyro.
 
-This library does not include code for accessing the LSM6DS33.  If you want to access it, you should install the separate [LSM6 library](https://github.com/pololu/lsm6-arduino).
-
-This library is very similar to the [Zumo32U4](https://github.com/pololu/zumo-32u4-arduino-library) library.
+This library includes code for accessing the LSM6DS33, forked from the separate [LSM6 library](https://github.com/pololu/lsm6-arduino).
 
 ## Installing the library
 
 If you are using version 1.6.2 or later of the [Arduino software (IDE)](http://www.arduino.cc/en/Main/Software), you can use the Library Manager to install this library:
 
 1. In the Arduino IDE, open the "Sketch" menu, select "Include Library", then "Manage Libraries...".
-2. Search for "Romi32U4".
-3. Click the Romi32U4 entry in the list.
+2. Search for "wpi-32u4-library".
+3. Click the entry in the list.
 4. Click "Install".
 
 If this does not work, you can manually install the library:
 
-1. Download the [latest release archive from GitHub](https://github.com/pololu/romi-32u4-arduino-library) and decompress it.
-2. Rename the folder "romi-32u4-arduino-library-master" to "Romi32U4".
-3. Move the "Romi32U4" folder into the "libraries" directory inside your Arduino sketchbook directory.  You can view your sketchbook location by opening the "File" menu and selecting "Preferences" in the Arduino IDE.  If there is not already a "libraries" folder in that location, you should make the folder yourself.
+1. Download the latest release from this page and decompress it.
+2. Rename the folder "wpi-32u4-library", if needed
+3. Move the "wpi-32u4-library" folder into the "libraries" directory inside your Arduino sketchbook directory. You can view your sketchbook location by opening the "File" menu and selecting "Preferences" in the Arduino IDE.  If there is not already a "libraries" folder in that location, you should make the folder yourself.
 4. After installing the library, restart the Arduino IDE.
 
 ## Examples
 
-Several example sketches are available that show how to use the library.  You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "Romi32U4".  If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
+Several example sketches are available that show how to use the library.  You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "wpi-32u4-library".  If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
 
 ### Not all examples have been converted to the wpi version of the library. At the moment only the following will run:
 
@@ -62,7 +59,27 @@ The main classes and functions provided by the library are listed below:
 * usbPowerPresent()
 * readBatteryMillivolts()
 
-## Component libraries
+## Component libraries (platformio)
+
+Add the following lines to your platformio.ini file:
+
+~~~{.cpp}
+lib_deps = 
+     Wire
+     wpiroboticsengineering/wpi-32u4-library @ 2.1.0
+~~~
+
+For later releases, change the last value appropriately.
+
+You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>` because then the Arduino IDE might try to use the standalone Pushbutton library (if you previously installed it), and it would conflict with the copy of the Pushbutton code included in this library. The only `#include` line needed to access all features of this library are:
+
+~~~{.cpp}
+#include <Romi32U4.h>
+~~~
+
+## Component libraries (Arduino)
+
+If you're using platformio (recommended), these instructions are obsolete.
 
 This library also includes copies of several other Arduino libraries inside it which are used to help implement the classes and functions above.
 
@@ -75,7 +92,7 @@ This library also includes copies of several other Arduino libraries inside it w
 
 You can use these libraries in your sketch automatically without any extra installation steps and without needing to add any extra `#include` lines to your sketch.
 
-You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>` because then the Arduino IDE might try to use the standalone Pushbutton library (if you previously installed it), and it would conflict with the copy of the Pushbutton code included in this library.  The only `#include` line needed to access all features of this library are:
+You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>` because then the Arduino IDE might try to use the standalone Pushbutton library (if you previously installed it), and it would conflict with the copy of the Pushbutton code included in this library. The only `#include` line needed to access all features of this library are:
 
 ~~~{.cpp}
 #include <Romi32U4.h>
@@ -83,10 +100,25 @@ You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>`
 
 ## Documentation
 
-For complete documentation, see https://pololu.github.io/romi-32u4-arduino-library.  If you are already on that page, then click on the links in the "Classes and functions" section above.
+For complete documentation, see https://pololu.github.io/romi-32u4-arduino-library.  If you are already on that page, then click on the links in the "Classes and functions" section above. We are working on updating documentation for the changes to the library from the forked Pololu library. The biggest change is to the motor class, where
+
+~~~{.cpp}
+Romi32U4Motors::setSpeeds()
+~~~
+
+has been changed to 
+
+~~~{.cpp}
+Romi32U4Motors::setEfforts()
+~~~
+
+since that better represents the behavior of that function.
+
+Some other library files (LCD, buzzer) have been removed, since they conflict with some of the changes in the background (mostly to timers).
 
 ## Version history
 
+* 2.1.0 (2020-09-06): Primary release for WPI courses.
 * 1.0.2 (2017-07-17): Fixed a bug that caused errors for the right encoder to be reported as errors for the left encoder.
 * 1.0.1 (2017-02-23):
   * Changed the internal `Romi32U4Motors::maxSpeed` variable to be an `int16_t` so it can be compared to other `int16_t` variables without warnings.
