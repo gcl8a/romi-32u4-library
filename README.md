@@ -12,7 +12,21 @@ The Romi 32U4 Control Board turns the Romi chassis into a programmable, Arduino-
 
 This library includes code for accessing the LSM6DS33, forked from the separate [LSM6 library](https://github.com/pololu/lsm6-arduino).
 
-## Installing the library
+## Installing the library (platformio)
+
+Add the following lines to your platformio.ini file:
+
+~~~{.cpp}
+lib_deps = 
+     Wire
+     wpiroboticsengineering/wpi-32u4-library @ 2.1.0
+~~~
+
+You're done.
+
+For later releases, change the last value appropriately.
+
+## Installing the library (Arduino)
 
 If you are using version 1.6.2 or later of the [Arduino software (IDE)](http://www.arduino.cc/en/Main/Software), you can use the Library Manager to install this library:
 
@@ -28,11 +42,15 @@ If this does not work, you can manually install the library:
 3. Move the "wpi-32u4-library" folder into the "libraries" directory inside your Arduino sketchbook directory. You can view your sketchbook location by opening the "File" menu and selecting "Preferences" in the Arduino IDE.  If there is not already a "libraries" folder in that location, you should make the folder yourself.
 4. After installing the library, restart the Arduino IDE.
 
-## Examples
+## Examples (platformio)
 
-Several example sketches are available that show how to use the library.  You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "wpi-32u4-library".  If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
+...
 
-### Not all examples have been converted to the wpi version of the library. At the moment only the following will run:
+## Examples (Arduino)
+
+Several example sketches are available that show how to use the library. You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "wpi-32u4-library". If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
+
+### Not all examples have been converted to the wpi version of the library. At the moment we've updated the following:
 
 * MotorTest
 * Encoders
@@ -59,27 +77,7 @@ The main classes and functions provided by the library are listed below:
 * usbPowerPresent()
 * readBatteryMillivolts()
 
-## Component libraries (platformio)
-
-Add the following lines to your platformio.ini file:
-
-~~~{.cpp}
-lib_deps = 
-     Wire
-     wpiroboticsengineering/wpi-32u4-library @ 2.1.0
-~~~
-
-For later releases, change the last value appropriately.
-
-You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>` because then the Arduino IDE might try to use the standalone Pushbutton library (if you previously installed it), and it would conflict with the copy of the Pushbutton code included in this library. The only `#include` line needed to access all features of this library are:
-
-~~~{.cpp}
-#include <Romi32U4.h>
-~~~
-
-## Component libraries (Arduino)
-
-If you're using platformio (recommended), these instructions are obsolete.
+## Component libraries
 
 This library also includes copies of several other Arduino libraries inside it which are used to help implement the classes and functions above.
 
