@@ -24,6 +24,8 @@ lib_deps =
 
 You're done.
 
+(You may or may not need to add Wire -- it can't hurt if you do.)
+
 For later releases, change the last value appropriately.
 
 ## Installing the library (Arduino)
