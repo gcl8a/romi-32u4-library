@@ -1,6 +1,6 @@
 # Doxygen configuration file for generating documentation.
 PROJECT_NAME = "Romi32U4 library"
-OUTPUT_DIRECTORY = docs
+OUTPUT_DIRECTORY = .
 INLINE_INHERITED_MEMB = YES
 INPUT = .
 EXCLUDE = examples

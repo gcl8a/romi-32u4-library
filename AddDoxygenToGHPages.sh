@@ -4,10 +4,10 @@ GITURL=$(git config --get remote.origin.url)
 
 echo $GITURL
 
-#rm -rf html
+rm -rf html
 git commit -a -m"Store Doxygen to master"
 git push
-if (!test -e html) then
+if ( ! test -e html) then
 	git clone $GITURL html
 fi
 cd html
@@ -19,7 +19,7 @@ else
 	rm -r *
 	echo "# A simple README file for the gh-pages branch" > README.md
 	git add README.md
-	git commit -m"Replaced gh-pages html with simple readme"
+	git commit -a -m"Replaced gh-pages html with simple readme"
 	git push -u origin gh-pages
 fi
 cd ..
