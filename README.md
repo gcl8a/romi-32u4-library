@@ -26,7 +26,7 @@ You're done.
 
 (You may or may not need to add Wire -- it can't hurt if you do.)
 
-For later releases, change the last value appropriately.
+For later releases, change the last value appropriately. If you're feeling brave, drop the version number and get the latest dev version (and let us know f any problems that arise so we can fix them).
 
 ## Installing the library (Arduino)
 
