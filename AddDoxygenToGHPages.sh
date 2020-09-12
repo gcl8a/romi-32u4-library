@@ -25,7 +25,7 @@ fi
 cd ..
 
 
-doxygen doxy.doxyfile
+doxygen Doxyfile
 
 cd html
 git add * 
