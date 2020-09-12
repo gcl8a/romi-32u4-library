@@ -105,7 +105,7 @@ You should avoid adding extra `#include` lines such as `#include <Pushbutton.h>`
 
 ## Documentation
 
-For complete documentation, see https://pololu.github.io/romi-32u4-arduino-library.  If you are already on that page, then click on the links in the "Classes and functions" section above. We are working on updating documentation for the changes to the library from the forked Pololu library. The biggest change is to the motor class, where
+For complete documentation, see https://pololu.github.io/wpi-32u4-library.  If you are already on that page, then click on the links in the "Classes and functions" section above. We are working on updating documentation for the changes to the library from the forked Pololu library. The biggest change is to the motor class, where
 
 ~~~{.cpp}
 Romi32U4Motors::setSpeeds()
