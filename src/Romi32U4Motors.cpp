@@ -33,8 +33,11 @@ void Romi32U4Motors::init2()
     TCCR1A = 0b10101000; //gcl: added OCR1C for adding a third motor
     TCCR1B = 0b00010001;
     ICR1 = 400;
+
+    //set all three outputs to zero
     OCR1A = 0;
     OCR1B = 0;
+    OCR1C = 0;
 }
 
 void Romi32U4Motors::flipLeftMotor(bool flip)
