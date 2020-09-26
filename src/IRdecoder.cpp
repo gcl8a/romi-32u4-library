@@ -12,12 +12,12 @@ void handleIRsensor(void)
 void IRDecoder::init(void)
 {
   //SET UP FOR PIN 1
-  pinMode(1, INPUT);
-  attachInterrupt(digitalPinToInterrupt(1), ::handleIRsensor, CHANGE);
+  //pinMode(1, INPUT);
+  //attachInterrupt(digitalPinToInterrupt(1), ::handleIRsensor, CHANGE);
 
   //UNCOMMENT THESE AND CHANGE LINE 31 (in handleIRsensor) TO MATCH TO USE PIN 14 (one of the PCINTs)
-  //pinMode(14, INPUT);
-  //attachPCInt(PCINT3, ::handleIRsensor);
+  pinMode(14, INPUT);
+  attachPCInt(PCINT3, ::handleIRsensor);
 }
 
 void IRDecoder::handleIRsensor(void)
@@ -28,7 +28,7 @@ void IRDecoder::handleIRsensor(void)
   //probably best to use Pololu's FastGPIO library -- need to keep this
   //as short as possible
 
-  if(!FastGPIO::Pin<1>::isInputHigh()) // FALLING edge
+  if(!FastGPIO::Pin<14>::isInputHigh()) // FALLING edge
   {
     fallingEdge = currUS; 
   }
