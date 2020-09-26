@@ -18,6 +18,8 @@ void loop()
   if(datum)
   {
     Serial.print(datum, HEX); 
+    Serial.print('\t');
+    Serial.print((uint8_t)(datum >> 16));
     Serial.print('\n');
   }
 }
