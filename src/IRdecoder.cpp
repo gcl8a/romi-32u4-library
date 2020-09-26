@@ -1,5 +1,6 @@
 #include <IRdecoder.h>
 #include <FastGPIO.h>
+#include <pcint.h>
 
 
 void handleIRsensor(void)
@@ -9,14 +10,17 @@ void handleIRsensor(void)
 
 void IRDecoder::init(void)
 {
-  pinMode(0, INPUT);
-  attachInterrupt(digitalPinToInterrupt(0), ::handleIRsensor, CHANGE);
+  // pinMode(0, INPUT);
+  // attachInterrupt(digitalPinToInterrupt(0), ::handleIRsensor, CHANGE);
+
+  pinMode(14, INPUT);
+  attachPCInt(PCINT3, ::handleIRsensor);
 }
 
 void IRDecoder::handleIRsensor(void)
 {
   uint32_t currUS = micros();
-  if(!FastGPIO::Pin<0>::isInputHigh()) // FALLING edge
+  if(!FastGPIO::Pin<14>::isInputHigh()) // FALLING edge
   {
     fallingEdge = currUS; 
   }
@@ -30,8 +34,7 @@ void IRDecoder::handleIRsensor(void)
     uint32_t codeLength = risingEdge - lastRisingEdge;
     lastRisingEdge = risingEdge;
 
-
-    bits[index] = delta;
+    // bits[index] = delta;
     
     if(delta > 8500 && delta < 9500) // received a start pulse
     {
@@ -50,13 +53,13 @@ void IRDecoder::handleIRsensor(void)
 
     else if(state == IR_PREAMBLE)
     {
-      if(codeLength < 5200 && codeLength > 4800) //preamble
+      if(codeLength < 5300 && codeLength > 4800) //preamble
       {
         currCode = 0;
         state = IR_ACTIVE;
       }
 
-      else if(codeLength < 3200 && codeLength > 2800) //repeat code
+      else if(codeLength < 3300 && codeLength > 2800) //repeat code
       {
         state = IR_REPEAT;
         lastReceiveTime = millis();

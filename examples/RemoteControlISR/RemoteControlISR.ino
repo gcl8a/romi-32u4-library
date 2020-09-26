@@ -12,7 +12,7 @@ void setup()
 
 void loop()
 { 
-  delay(10);
+  delay(1);
   uint32_t datum = decoder.getCode();
 
   if(datum)

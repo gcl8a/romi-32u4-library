@@ -6,9 +6,7 @@ private:
     enum IR_STATE {IR_READY, IR_PREAMBLE, IR_REPEAT, IR_ACTIVE, IR_COMPLETE, IR_ERROR};
     IR_STATE state = IR_READY;
 
-    volatile uint32_t lastReceiveTime = 0; //used to keep track of if the current code is active
-
-    //volatile uint8_t dataReady = 0;
+    volatile uint32_t lastReceiveTime = 0; //not really used -- could be used to sunset codes
 
     volatile uint32_t currCode = 0;
     volatile uint8_t index = 0;
@@ -18,7 +16,7 @@ private:
 
     volatile uint32_t lastRisingEdge = 0;
 public:
-    volatile uint16_t bits[32];
+    //volatile uint16_t bits[32];
 
 public:
     void init(void);
