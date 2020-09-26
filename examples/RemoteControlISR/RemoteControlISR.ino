@@ -17,7 +17,7 @@ void loop()
   delay(1);
   uint32_t keyCode = decoder.getKeyCode();
 
-  if(keyCode)
+  if(keyCode > 0)
   {
     Serial.print(keyCode); 
     // Serial.print('\t');
