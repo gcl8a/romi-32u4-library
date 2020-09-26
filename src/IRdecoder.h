@@ -55,7 +55,7 @@ public:
       return currCode;
     }
     else
-      return 0;
+      return -1;
   }
 
   int16_t getKeyCode(void) //returns the most recent key code; returns 0 on error (not sure if 0 can be a code or not!!!)
