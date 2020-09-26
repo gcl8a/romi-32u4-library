@@ -15,7 +15,7 @@ void IRDecoder::init(void)
   pinMode(1, INPUT);
   attachInterrupt(digitalPinToInterrupt(1), ::handleIRsensor, CHANGE);
 
-  //UNCOMMENT THESE AND CHANGE LINE 27 TO MATCH TO USE PIN 14 (one of the PCINTs)
+  //UNCOMMENT THESE AND CHANGE LINE 27 (in handleIRsensor) TO MATCH TO USE PIN 14 (one of the PCINTs)
   //pinMode(14, INPUT);
   //attachPCInt(PCINT3, ::handleIRsensor);
 }

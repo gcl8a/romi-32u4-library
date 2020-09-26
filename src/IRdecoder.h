@@ -19,7 +19,12 @@
 class IRDecoder
 {
 private:
-    enum IR_STATE {IR_READY, IR_PREAMBLE, IR_REPEAT, IR_ACTIVE, IR_COMPLETE, IR_ERROR};
+    enum IR_STATE { IR_READY,       //idle, returns to this state after you request a code
+                    IR_PREAMBLE,    //received the start burst, waiting for first bit
+                    IR_REPEAT,      //received repeat code (part of NEC protocol); last code will be returned
+                    IR_ACTIVE,      //have some bits, but not yet complete
+                    IR_COMPLETE,    //a valid code has been received
+                    IR_ERROR};      //an error occurred; won't return a valid code
 
     IR_STATE state = IR_READY;      //a simple state machine for managing reception
 
@@ -38,6 +43,7 @@ public:
 public:
     void init(void);   //call this in the setup()
     void handleIRsensor(void);  //ISR
+
     uint32_t getCode(void)      //returns the most recent valid code; returns zero if there was an error
     {
       if(state == IR_COMPLETE || state == IR_REPEAT) {state = IR_READY; return currCode;}
