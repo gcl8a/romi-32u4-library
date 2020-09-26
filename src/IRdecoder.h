@@ -12,7 +12,7 @@
  * 
  * https://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
  * 
- * This does not yet interpret the codes into which key was pressed. That needs to be 
+ * This does not interpret the codes into which key was pressed. That needs to be 
  * mapped on a remote by remote basis.
  */
 

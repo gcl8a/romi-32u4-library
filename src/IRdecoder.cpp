@@ -101,13 +101,12 @@ void IRDecoder::handleIRsensor(void)
         state = IR_ERROR;
       }
 
-      if(index == 32) 
+      if(index == 32) //full set of bits
       {
         //first, check for errors
         if(((currCode ^ (currCode >> 8)) & 0x00ff00ff) != 0x00ff00ff) state = IR_ERROR;
 
-        //we're good to go
-        else
+        else //we're good to go
         {        
           state = IR_COMPLETE;
           lastReceiveTime = millis();
