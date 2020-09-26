@@ -55,7 +55,6 @@ public:
       if(state == IR_COMPLETE || state == IR_REPEAT) {state = IR_READY; return (uint8_t)(currCode >> 16);}
       else return 0;
     }
-
 };
 
 extern IRDecoder decoder;

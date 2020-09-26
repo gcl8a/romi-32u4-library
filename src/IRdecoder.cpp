@@ -25,6 +25,9 @@ void IRDecoder::handleIRsensor(void)
   uint32_t currUS = micros();
 
   //THIS MUST AGREE WITH THE PIN IN THE init() FUNCTION.
+  //probably best to use Pololu's FastGPIO library -- need to keep this
+  //as short as possible
+
   if(!FastGPIO::Pin<1>::isInputHigh()) // FALLING edge
   {
     fallingEdge = currUS; 
@@ -95,7 +98,10 @@ void IRDecoder::handleIRsensor(void)
 
       if(index == 32) 
       {
+        //first, check for errors
         if(((currCode ^ (currCode >> 8)) & 0x00ff00ff) != 0x00ff00ff) state = IR_ERROR;
+
+        //we're good to go
         else
         {        
           state = IR_COMPLETE;
