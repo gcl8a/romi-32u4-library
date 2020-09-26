@@ -10,17 +10,21 @@ void handleIRsensor(void)
 
 void IRDecoder::init(void)
 {
-  // pinMode(0, INPUT);
-  // attachInterrupt(digitalPinToInterrupt(0), ::handleIRsensor, CHANGE);
+  //SET UP FOR PIN 1
+  pinMode(1, INPUT);
+  attachInterrupt(digitalPinToInterrupt(1), ::handleIRsensor, CHANGE);
 
-  pinMode(14, INPUT);
-  attachPCInt(PCINT3, ::handleIRsensor);
+  //UNCOMMENT THESE AND CHANGE LINE 27 TO MATCH TO USE PIN 14 (one of the PCINTs)
+  //pinMode(14, INPUT);
+  //attachPCInt(PCINT3, ::handleIRsensor);
 }
 
 void IRDecoder::handleIRsensor(void)
 {
   uint32_t currUS = micros();
-  if(!FastGPIO::Pin<14>::isInputHigh()) // FALLING edge
+
+  //THIS MUST AGREE WITH THE PIN IN THE init() FUNCTION.
+  if(!FastGPIO::Pin<1>::isInputHigh()) // FALLING edge
   {
     fallingEdge = currUS; 
   }
