@@ -2,6 +2,7 @@
 #include <FastGPIO.h>
 #include <pcint.h>
 
+/* Interprets an IR remote with NEC encoding. See IRdecoder.h for more explanation. */
 
 void handleIRsensor(void)
 {
