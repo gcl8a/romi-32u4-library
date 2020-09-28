@@ -6,6 +6,9 @@ typedef void(*PCISR)(void);
 //array to hold all of the indivicual ISRs; initialize to null
 PCISR pcISR[] = {0, 0, 0, 0, 0, 0, 0, 0}; 
 
+//store the previous state -- needed to find which have changed
+static volatile uint8_t lastB = PINB; //these are likely all 0 at the start
+
 void attachPCInt(uint8_t pcInt, void (*pcisr)(void))
 {
     cli();
@@ -15,14 +18,13 @@ void attachPCInt(uint8_t pcInt, void (*pcisr)(void))
     pcISR[pcInt] = pcisr;   //register the ISR
 
     PCIFR = (1 << PCIF0);   //clear any pending interrupt before we get started
+
+    lastB |= (PINB & (1 << pcInt)); //make sure we start with the current state
     sei();
 }
 
 ISR(PCINT0_vect)
 {
-    //store the previous state -- needed to find which have changed
-    static volatile uint8_t lastB = PINB;
-
     //read the current state of the PCINT pins
     volatile uint8_t pinsB = PINB;
 
