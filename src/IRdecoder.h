@@ -19,42 +19,55 @@
 class IRDecoder
 {
 private:
-    enum IR_STATE { IR_READY,       //idle, returns to this state after you request a code
-                    IR_PREAMBLE,    //received the start burst, waiting for first bit
-                    IR_REPEAT,      //received repeat code (part of NEC protocol); last code will be returned
-                    IR_ACTIVE,      //have some bits, but not yet complete
-                    IR_COMPLETE,    //a valid code has been received
-                    IR_ERROR};      //an error occurred; won't return a valid code
+  enum IR_STATE
+  {
+    IR_READY,    //idle, returns to this state after you request a code
+    IR_PREAMBLE, //received the start burst, waiting for first bit
+    IR_REPEAT,   //received repeat code (part of NEC protocol); last code will be returned
+    IR_ACTIVE,   //have some bits, but not yet complete
+    IR_COMPLETE, //a valid code has been received
+    IR_ERROR
+  }; //an error occurred; won't return a valid code
 
-    IR_STATE state = IR_READY;      //a simple state machine for managing reception
+  IR_STATE state = IR_READY; //a simple state machine for managing reception
 
-    volatile uint32_t lastReceiveTime = 0; //not really used -- could be used to sunset codes
+  volatile uint32_t lastReceiveTime = 0; //not really used -- could be used to sunset codes
 
-    volatile uint32_t currCode = 0; //the most recently received valid code
-    volatile uint8_t index = 0;     //for tracking which bit we're on
+  volatile uint32_t currCode = 0; //the most recently received valid code
+  volatile uint8_t index = 0;     //for tracking which bit we're on
 
-    volatile uint32_t fallingEdge = 0;
-    volatile uint32_t risingEdge = 0;
+  volatile uint32_t fallingEdge = 0;
+  volatile uint32_t risingEdge = 0;
 
-    volatile uint32_t lastRisingEdge = 0;  //used for tracking spacing between rising edges, i.e., bit value
+  volatile uint32_t lastRisingEdge = 0; //used for tracking spacing between rising edges, i.e., bit value
 public:
-    //volatile uint16_t bits[32];  //I used this for debugging; obsolete
+  //volatile uint16_t bits[32];  //I used this for debugging; obsolete
 
 public:
-    void init(void);   //call this in the setup()
-    void handleIRsensor(void);  //ISR
+  void init(void);           //call this in the setup()
+  void handleIRsensor(void); //ISR
 
-    uint32_t getCode(void)      //returns the most recent valid code; returns zero if there was an error
+  uint32_t getCode(void) //returns the most recent valid code; returns zero if there was an error
+  {
+    if (state == IR_COMPLETE || state == IR_REPEAT)
     {
-      if(state == IR_COMPLETE || state == IR_REPEAT) {state = IR_READY; return currCode;}
-      else return 0;
+      state = IR_READY;
+      return currCode;
     }
+    else
+      return -1;
+  }
 
-    uint8_t getKeyCode(void)      //returns the most recent key code; returns 0 on error (not sure if 0 can be a code or not!!!)
+  int16_t getKeyCode(void) //returns the most recent key code; returns 0 on error (not sure if 0 can be a code or not!!!)
+  {
+    if (state == IR_COMPLETE || state == IR_REPEAT)
     {
-      if(state == IR_COMPLETE || state == IR_REPEAT) {state = IR_READY; return (uint8_t)(currCode >> 16);}
-      else return 0;
+      state = IR_READY;
+      return (uint8_t)(currCode >> 16);
     }
+    else
+      return -1;
+  }
 };
 
 extern IRDecoder decoder;
