@@ -19,7 +19,9 @@ void attachPCInt(uint8_t pcInt, void (*pcisr)(void))
 
     PCIFR = (1 << PCIF0);   //clear any pending interrupt before we get started
 
-    lastB |= (PINB & (1 << pcInt)); //make sure we start with the current state
+    //make sure we start with the current state, but don't clobber other pins
+    lastB &= ~(1 << pcInt);             //clear lastB for the pin
+    lastB |= PINB & (1 << pcInt));      //then set it to the current state
     sei();
 }
 
