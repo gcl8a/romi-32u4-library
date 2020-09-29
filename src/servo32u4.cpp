@@ -26,7 +26,7 @@ void Servo32U4::Init(void)
     pinMode(5, OUTPUT); //don't forget to enable the pin as OUTPUT
 }
 
-void Servo32U4::Attach(void) //MUST USE PIN 6
+void Servo32U4::Attach(void) //MUST USE PIN 5
 {
     cli();
     TCCR3A = 0x82; //set up OCR3A
