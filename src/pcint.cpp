@@ -21,7 +21,7 @@ void attachPCInt(uint8_t pcInt, void (*pcisr)(void))
 
     //make sure we start with the current state, but don't clobber other pins
     lastB &= ~(1 << pcInt);             //clear the affected pin in lastB
-    lastB |= PINB & (1 << pcInt));      //then set it to the current state
+    lastB |= PINB & (1 << pcInt);      //then set it to the current state
     sei();
 }
 

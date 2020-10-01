@@ -75,7 +75,7 @@ void IRDecoder::handleIRsensor(void)
       else if(codeLength < 3300 && codeLength > 2800) //repeat code
       {
         state = IR_REPEAT;
-        lastReceiveTime = millis();
+        lastReceiveTime = millis(); //not really used
       }
     }
 
