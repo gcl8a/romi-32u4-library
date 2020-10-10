@@ -25,7 +25,7 @@ private:
     uint8_t feedbackPin = -1;
 public:
     static void Init(void);
-    static void Attach(void); //MUST USE PIN 6
+    static void Attach(void); //MUST USE PIN 5
     void Detach(void);
     void Write(uint16_t microseconds);
     uint16_t SetMinMaxUS(uint16_t min, uint16_t max);
