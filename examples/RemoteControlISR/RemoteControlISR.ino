@@ -15,7 +15,7 @@ void setup()
 void loop()
 { 
   delay(1);
-  uint32_t keyCode = decoder.getKeyCode();
+  int32_t keyCode = decoder.getKeyCode();
 
   if(keyCode >= 0)
   {
