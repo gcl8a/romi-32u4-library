@@ -6,7 +6,7 @@
  * 
  * Upon request, I could figure out how to have 11-bit accuracy, or 8 us.
  * 
- * OCR4D controls the pulse on pin 6 -- THE SERVO MUST BE ON PIN 6! 
+ * OCR3A controls the pulse on pin 5 -- THE SERVO MUST BE ON PIN 5! 
  * 
  * OCR4D takes a 10-bit value, but two MSBs are written using a common register (TC4H). 
  * But since a value of 256 corresponds to 4096 us, the high bits will always be 00.
