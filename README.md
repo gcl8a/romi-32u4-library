@@ -4,6 +4,10 @@ Version: 2.1.0<br/>
 Release date: 2020-09-06<br/>
 Forked from [www.pololu.com](https://www.pololu.com/)
 
+# Doxygen Documentation
+
+https://wpiroboticsengineering.github.io/wpi-32u4-library/annotated.html
+
 ## Summary
 
 This is a C++ library for the Arduino IDE that helps access the on-board hardware of the [Romi 32U4 Control Board](https://www.pololu.com/product/3544).
