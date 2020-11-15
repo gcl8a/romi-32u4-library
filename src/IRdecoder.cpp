@@ -7,6 +7,8 @@
 uint8_t digitalPinToPCInterrupt(uint8_t pin)
 {
   uint8_t pcInt = NOT_AN_INTERRUPT;
+
+#if defined(__AVR_ATmega32U4__)
   switch(pin)
   {
     case 17: pcInt = PCINT0; break;
@@ -19,6 +21,7 @@ uint8_t digitalPinToPCInterrupt(uint8_t pin)
     case 11: pcInt = PCINT7; break;
     default: break;
   }
+#endif
 
   return pcInt;
 }
