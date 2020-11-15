@@ -4,6 +4,25 @@
 
 /* Interprets an IR remote with NEC encoding. See IRdecoder.h for more explanation. */
 
+uint8_t digitalPinToPCInterrupt(uint8_t pin)
+{
+  uint8_t pcInt = NOT_AN_INTERRUPT;
+  switch(pin)
+  {
+    case 17: pcInt = PCINT0; break;
+    case 15: pcInt = PCINT1; break;
+    case 16: pcInt = PCINT2; break;
+    case 14: pcInt = PCINT3; break;
+    case  8: pcInt = PCINT4; break;
+    case  9: pcInt = PCINT5; break;
+    case 10: pcInt = PCINT6; break;
+    case 11: pcInt = PCINT7; break;
+    default: break;
+  }
+
+  return pcInt;
+}
+
 void handleIRsensor(void)
 {
   decoder.handleIRsensor();
@@ -16,19 +35,28 @@ void IRDecoder::init(void)
   //attachInterrupt(digitalPinToInterrupt(1), ::handleIRsensor, CHANGE);
 
   //UNCOMMENT THESE AND CHANGE LINE 31 (in handleIRsensor) TO MATCH TO USE PIN 14 (one of the PCINTs)
-  pinMode(14, INPUT);
-  attachPCInt(PCINT3, ::handleIRsensor);
+  pinMode(pin, INPUT);
+
+  if(digitalPinToInterrupt(pin) != NOT_AN_INTERRUPT)
+  {
+    attachInterrupt(digitalPinToInterrupt(pin), ::handleIRsensor, CHANGE);
+  }
+  else if(digitalPinToPCInterrupt(pin) != NOT_AN_INTERRUPT)
+  {
+    attachPCInt(digitalPinToPCInterrupt(pin), ::handleIRsensor);
+  }
+  else
+  {
+    Serial.println("Not an interrupt pin!");
+  }
 }
 
 void IRDecoder::handleIRsensor(void)
 {
   uint32_t currUS = micros();
 
-  //THIS MUST AGREE WITH THE PIN IN THE init() FUNCTION.
-  //probably best to use Pololu's FastGPIO library -- need to keep this
-  //as short as possible
-
-  if(!FastGPIO::Pin<14>::isInputHigh()) // FALLING edge
+  //if(!FastGPIO::Pin<14>::isInputHigh()) // could use FastGPIO for speed
+  if(!digitalRead(pin)) // FALLING edge
   {
     fallingEdge = currUS; 
   }
@@ -81,17 +109,13 @@ void IRDecoder::handleIRsensor(void)
 
     else if(state == IR_ACTIVE)
     {
-      //bits[index] = codeLength;
-      
       if(codeLength < 1300 && codeLength > 900) //short = 0
       {
-  //      bits[index] = 0;
         index++;
       }
       
       else if(codeLength < 2500 && codeLength > 2000) //long = 1
       {
-  //      bits[index] = 1;
         currCode += ((uint32_t)1 << index);
         index++;
       }

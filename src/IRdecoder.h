@@ -19,6 +19,7 @@
 class IRDecoder
 {
 private:
+  uint8_t pin = -1;
   enum IR_STATE
   {
     IR_READY,    //idle, returns to this state after you request a code
