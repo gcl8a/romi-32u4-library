@@ -20,6 +20,7 @@ class IRDecoder
 {
 private:
   uint8_t pin = -1;
+
   enum IR_STATE
   {
     IR_READY,    //idle, returns to this state after you request a code
@@ -45,6 +46,7 @@ public:
   //volatile uint16_t bits[32];  //I used this for debugging; obsolete
 
 public:
+  IRDecoder(uint8_t p) : pin(p) {}
   void init(void);           //call this in the setup()
   void handleIRsensor(void); //ISR
 

@@ -3,9 +3,11 @@
 #include "RemoteConstants.h"
 #include "IRdecoder.h"
 
+const uint8_t IR_PIN = 17;
+
 Romi32U4Motors motors;
 
-IRDecoder decoder;
+IRDecoder decoder(IR_PIN);
 
 void setup()
 {
