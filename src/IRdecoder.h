@@ -66,7 +66,7 @@ public:
     if (state == IR_COMPLETE || (acceptRepeat == true && state == IR_REPEAT))
     {
       state = IR_READY;
-      return (uint8_t)(currCode >> 16);
+      return (currCode >> 16) & 0x0ff;
     }
     else
       return -1;

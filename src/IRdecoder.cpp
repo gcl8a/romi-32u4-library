@@ -82,7 +82,7 @@ void IRDecoder::handleIRsensor(void)
     //it's actually optimized for sensitivity. So I set the maximum accepted pulse
     //length to 700us
 
-    else if(delta < 520 || delta > 700) // pulse wasn't right length => error
+    else if(delta < 500 || delta > 700) // pulse wasn't right length => error
     {
       state = IR_ERROR;
       currCode = -1;
@@ -98,9 +98,10 @@ void IRDecoder::handleIRsensor(void)
         state = IR_ACTIVE;
       }
 
-      else if(codeLength < 3300 && codeLength > 2800) //repeat code
+      else if(codeLength < 3300 && codeLength > 2700) //repeat code
       {
         state = IR_REPEAT;
+        if(((currCode ^ (currCode >> 8)) & 0x00ff0000) != 0x00ff0000) {state = IR_ERROR;} //but recheck code!
         lastReceiveTime = millis(); //not really used
       }
     }
@@ -126,7 +127,7 @@ void IRDecoder::handleIRsensor(void)
       if(index == 32) //full set of bits
       {
         //first, check for errors
-        if(((currCode ^ (currCode >> 8)) & 0x00ff00ff) != 0x00ff00ff) state = IR_ERROR;
+        if(((currCode ^ (currCode >> 8)) & 0x00ff0000) != 0x00ff0000) state = IR_ERROR;
 
         else //we're good to go
         {        
