@@ -109,11 +109,10 @@ class LSM6
 
     void enableDefault(void);
 
-private:
+public:
     void writeReg(uint8_t reg, uint8_t value);
     uint8_t readReg(uint8_t reg);
 
-public:
     void readAcc(void);
     void readGyro(void);
     void read(void);
