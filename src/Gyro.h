@@ -1,6 +1,6 @@
 #pragma once
 
-#include <LSM6.h>
+#include "LSM6.h"
 #include <Wire.h>
 
 class Gyro
