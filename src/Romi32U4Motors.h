@@ -13,9 +13,8 @@
  * that timer. */
 class Romi32U4Motors
 {
-  public:
-
-    /** \brief Flips the direction of the left motor.
+public:
+  /** \brief Flips the direction of the left motor.
      *
      * You can call this function with an argument of \c true if the left motor
      * of your Romi was not wired in the standard way and you want a
@@ -25,9 +24,9 @@ class Romi32U4Motors
      * direction pin being high.  If false, then positive motor effort will
      * correspond to the direction pin being low.
      */
-    static void flipLeftMotor(bool flip);
+  static void flipLeftMotor(bool flip);
 
-    /** \brief Flips the direction of the right motor.
+  /** \brief Flips the direction of the right motor.
      *
      * You can call this function with an argument of \c true if the right motor
      * of your Romi was not wired in the standard way and you want a
@@ -36,23 +35,23 @@ class Romi32U4Motors
      * \param flip If true, then positive motor effort will correspond to the
      * direction pin being high.  If false, then positive motor effort will
      * correspond to the direction pin being low. */
-    static void flipRightMotor(bool flip);
+  static void flipRightMotor(bool flip);
 
-    /** \brief Sets the effort for the left motor.
+  /** \brief Sets the effort for the left motor.
      *
      * \param effort A number from -300 to 300 representing the effort and
      * direction of the left motor.  Values of -300 or less result in full effort
      * reverse, and values of 300 or more result in full effort forward. */
-    static void setLeftEffort(int16_t effort);
+  static void setLeftEffort(int16_t effort);
 
-    /** \brief Sets the effort for the right motor.
+  /** \brief Sets the effort for the right motor.
      *
      * \param effort A number from -300 to 300 representing the effort and
      * direction of the right motor. Values of -300 or less result in full effort
      * reverse, and values of 300 or more result in full effort forward. */
-    static void setRightEffort(int16_t effort);
+  static void setRightEffort(int16_t effort);
 
-    /** \brief Sets the effort for both motors.
+  /** \brief Sets the effort for both motors.
      *
      * \param leftEffort A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
@@ -60,9 +59,9 @@ class Romi32U4Motors
      * \param rightEffort A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
-    static void setEfforts(int16_t leftEffort, int16_t rightEffort);
+  static void setEfforts(int16_t leftEffort, int16_t rightEffort);
 
-    /** \brief Turns turbo mode on or off.
+  /** \brief Turns turbo mode on or off.
      *
      * By default turbo mode is off.  When turbo mode is on, the range of speeds
      * accepted by the other functions in this library becomes -400 to 400
@@ -75,24 +74,28 @@ class Romi32U4Motors
      *
      * \param turbo If true, turns turbo mode on.
      *   If false, turns turbo mode off. */
-    static void allowTurbo(bool turbo);
+  static void allowTurbo(bool turbo);
 
-  private:
+  /** \brief returns the Max Effort for the motors
+     * 
+     * \return The maximum effort for the motors based on the turbo setting */
+  static int16_t getMaxEffort();
 
-    static inline void init()
+private:
+  static inline void init()
+  {
+    static bool initialized = false;
+
+    if (!initialized)
     {
-        static bool initialized = false;
-
-        if (!initialized)
-        {
-            initialized = true;
-            init2();
-        }
+      initialized = true;
+      init2();
     }
+  }
 
-    static void init2();
+  static void init2();
 
-    static int16_t maxEffort;
-    static bool flipLeft;
-    static bool flipRight;
+  static int16_t maxEffort;
+  static bool flipLeft;
+  static bool flipRight;
 };

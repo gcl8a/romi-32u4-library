@@ -59,7 +59,7 @@ void Romi32U4Motors::setLeftEffort(int16_t effort)
     if (effort < 0)
     {
         effort = -effort; // Make speed a positive quantity.
-        reverse = 1;    // Preserve the direction.
+        reverse = 1;      // Preserve the direction.
     }
     if (effort > maxEffort)
     {
@@ -79,8 +79,8 @@ void Romi32U4Motors::setRightEffort(int16_t effort)
 
     if (effort < 0)
     {
-        effort = -effort;  // Make speed a positive quantity.
-        reverse = 1;     // Preserve the direction.
+        effort = -effort; // Make speed a positive quantity.
+        reverse = 1;      // Preserve the direction.
     }
     if (effort > maxEffort)
     {
@@ -101,4 +101,9 @@ void Romi32U4Motors::setEfforts(int16_t leftEffort, int16_t rightEffort)
 void Romi32U4Motors::allowTurbo(bool turbo)
 {
     maxEffort = turbo ? 400 : 300;
+}
+
+int16_t Romi32U4Motors::getMaxEffort()
+{
+    return maxEffort;
 }
