@@ -28,17 +28,26 @@ void Gyro::setup()
   // Set the accelerometer full scale to 16 g because the default
   // value is too low, and leave the other settings the same.
   imu.writeReg(LSM6::CTRL1_XL, 0b10000100);
-  reset();
+  initialize();
 }
 
 /**
- * Reset the gyro offset.
+ * Reset the gyro heading
+ * Sets the heading to zero without changing the offset calculations
+ */
+void Gyro::reset()
+{
+  heading = 0.0;
+}
+
+/**
+ * Recalculate the gyro offset.
  * The gyro offset is calculated by sampling gyro values for a few seconds
  * while the robot is motionless at the start of the program. This is done by
  * averaging the non-moving zero rate values and using that average as a
  * baseline for actual readings.
  */
-void Gyro::reset()
+void Gyro::initialize()
 {
   // Sample the z velocities
   long sum = 0;

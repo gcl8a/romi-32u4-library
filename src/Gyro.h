@@ -10,6 +10,7 @@ public:
   float getHeading();
   void loop();
   void reset();
+  void initialize();
   void setup();
 
 private:
