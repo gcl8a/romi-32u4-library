@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['usbpowerpresent',['usbPowerPresent',['../Romi32U4_8h.html#acf21c49681fe010784b631551ab921f3',1,'Romi32U4.h']]]
+  ['timer_149',['Timer',['../class_timer.html#ad8ea788f95300a424258c4c7ca787095',1,'Timer']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['usbpause_2eh',['USBPause.h',['../USBPause_8h.html',1,'']]]
+  ['usbpause_2eh_105',['USBPause.h',['../_u_s_b_pause_8h.html',1,'']]]
 ];

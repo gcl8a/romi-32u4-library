@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lsm6',['LSM6',['../classLSM6.html',1,'']]]
+  ['irdecoder_82',['IRDecoder',['../class_i_r_decoder.html',1,'']]]
 ];

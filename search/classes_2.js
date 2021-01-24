@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['pin',['Pin',['../classFastGPIO_1_1Pin.html',1,'FastGPIO']]],
-  ['pinloan',['PinLoan',['../classFastGPIO_1_1PinLoan.html',1,'FastGPIO']]],
-  ['pushbutton',['Pushbutton',['../classPushbutton.html',1,'']]],
-  ['pushbuttonbase',['PushbuttonBase',['../classPushbuttonBase.html',1,'']]]
+  ['lsm6_83',['LSM6',['../class_l_s_m6.html',1,'']]]
 ];

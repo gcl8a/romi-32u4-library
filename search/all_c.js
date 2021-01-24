@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['wpi_2d32u4_2dlibrary',['wpi-32u4-library',['../index.html',1,'']]],
-  ['waitforbutton',['waitForButton',['../classPushbuttonBase.html#ab755065c930be0649597220316213e8a',1,'PushbuttonBase']]],
-  ['waitforpress',['waitForPress',['../classPushbuttonBase.html#a2e2787595c82ee0913ecf4c1eea4a2c8',1,'PushbuttonBase']]],
-  ['waitforrelease',['waitForRelease',['../classPushbuttonBase.html#ae5fff34b3e1ebd62fd02b99edd6bf13a',1,'PushbuttonBase']]]
+  ['vector_73',['vector',['../struct_l_s_m6_1_1vector.html',1,'LSM6']]],
+  ['vector_3c_20float_20_3e_74',['vector&lt; float &gt;',['../struct_l_s_m6_1_1vector.html',1,'LSM6']]],
+  ['vector_3c_20int16_5ft_20_3e_75',['vector&lt; int16_t &gt;',['../struct_l_s_m6_1_1vector.html',1,'LSM6']]]
 ];
