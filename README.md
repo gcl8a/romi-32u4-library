@@ -23,7 +23,7 @@ Add the following lines to your platformio.ini file:
 ~~~{.cpp}
 lib_deps = 
      Wire
-     wpiroboticsengineering/wpi-32u4-library @ 2.1.0
+     wpiroboticsengineering/wpi-32u4-library
 ~~~
 
 You're done.
