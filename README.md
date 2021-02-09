@@ -1,7 +1,7 @@
 # wpi-32u4-library
 
-Version: 2.1.0<br/>
-Release date: 2020-09-06<br/>
+Version: 2.5.0<br/>
+Release date: 2021-01-30<br/>
 Forked from [www.pololu.com](https://www.pololu.com/)
 
 # Doxygen Documentation
@@ -23,14 +23,12 @@ Add the following lines to your platformio.ini file:
 ~~~{.cpp}
 lib_deps = 
      Wire
-     wpiroboticsengineering/wpi-32u4-library @ 2.1.0
+     wpiroboticsengineering/wpi-32u4-library
 ~~~
 
 You're done.
 
 (You may or may not need to add Wire -- it can't hurt if you do.)
-
-For later releases, change the last value appropriately. If you're feeling brave, drop the version number and get the latest dev version (and let us know f any problems that arise so we can fix them).
 
 ## Installing the library (Arduino)
 
@@ -67,9 +65,9 @@ Several example sketches are available that show how to use the library. You can
 * Encoders
 * IMU
 * RotationResist (this one is fun!)
-* RemoteControl will compile, but has not been tested
+* RemoteControlISR
 * Buttons
-* Blink will likely run, but is untested
+* BlinkLEDs
 
 ## Classes and functions
 
@@ -127,6 +125,7 @@ Some other library files (LCD, buzzer) have been removed, since they conflict wi
 
 ## Version history
 
+* 2.5.0 (2021-01-30): Previous versions add IR remote with interrupts handled automatically (so long as you use either an external interrupt pin or PCINT). IMU updates.
 * 2.1.0 (2020-09-06): Primary release for WPI courses.
 * 1.0.2 (2017-07-17): Fixed a bug that caused errors for the right encoder to be reported as errors for the left encoder.
 * 1.0.1 (2017-02-23):
