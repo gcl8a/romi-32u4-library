@@ -19,6 +19,16 @@ void Timer::reset()
 }
 
 /**
+ * Change the timer interval to "NewInterval" then
+ * reset the timer to that the expired time is the current time + interval
+ */
+void Timer::reset(long newInterval)
+{
+    timeInterval = newInterval;
+    reset();
+}
+
+/**
  * Check if the timer is expired, that is the current time is past
  * the expired time.
  */
