@@ -81,7 +81,6 @@ public:
      * \return The maximum effort for the motors based on the turbo setting */
   static int16_t getMaxEffort();
 
-private:
   static inline void init()
   {
     static bool initialized = false;
@@ -92,6 +91,8 @@ private:
       init2();
     }
   }
+
+private:
 
   static void init2();
 
