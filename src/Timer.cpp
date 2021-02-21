@@ -4,7 +4,7 @@
 /**
  * Create a timer that will expire every "interval"
  **/
-Timer::Timer(long interval)
+Timer::Timer(unsigned long interval)
 {
     expiredTime = millis() + interval;
     timeInterval = interval;
@@ -22,7 +22,7 @@ void Timer::reset()
  * Change the timer interval to "NewInterval" then
  * reset the timer to that the expired time is the current time + interval
  */
-void Timer::reset(long newInterval)
+void Timer::reset(unsigned long newInterval)
 {
     timeInterval = newInterval;
     reset();

@@ -3,12 +3,12 @@
 class Timer
 {
 public:
-    Timer(long interval);
+    Timer(unsigned long interval);
     bool isExpired();
     void reset();
-    void reset(long newInterval);
+    void reset(unsigned long newInterval);
 
 private:
-    long expiredTime;
-    long timeInterval;
+    unsigned long expiredTime;
+    unsigned long timeInterval;
 };
