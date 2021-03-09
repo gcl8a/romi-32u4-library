@@ -7,7 +7,7 @@
  * OCR3A controls the pulse on pin 5 -- THE SERVO MUST BE ON PIN 5! 
  * 
  * Defaults to a range of 1000 - 2000 us, but can be customized.
- */ 
+ */
 
 #include <Arduino.h>
 
@@ -18,6 +18,8 @@ private:
     uint16_t usMax = 2000;
 
     uint8_t feedbackPin = -1;
+    static bool isAttached;
+
 public:
     static void Init(void);
     static void Attach(void); //MUST USE PIN 5
