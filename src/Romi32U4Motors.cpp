@@ -25,7 +25,7 @@ void Romi32U4Motors::init2()
     // Timer 1 configuration
     // prescaler: clockI/O / 1
     // outputs enabled
-    // phase-correct PWM
+    // phase/freq.-correct PWM
     // top of 400
     //
     // PWM frequency calculation
