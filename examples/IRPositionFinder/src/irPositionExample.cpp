@@ -24,11 +24,6 @@
 
 IRDirectionFinder irFinder;
 
-/*!
- *  @brief Print the position result.
- */
-void printResult();
-
 void setup()
 {
   Serial.begin(19200);
@@ -65,5 +60,5 @@ void loop()
     Serial.println("Device not available!");
   }
   
-  delay(50);
+  delay(50); //this is just a test program, so we'll allow a delay here
 }
