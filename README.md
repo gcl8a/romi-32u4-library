@@ -1,6 +1,6 @@
 # wpi-32u4-library
 
-Version: 2.5.0<br/>
+Version: 2.6.0<br/>
 Release date: 2021-01-30<br/>
 Forked from [www.pololu.com](https://www.pololu.com/)
 
@@ -23,7 +23,7 @@ Add the following lines to your platformio.ini file:
 ~~~{.cpp}
 lib_deps = 
      Wire
-     wpiroboticsengineering/wpi-32u4-library
+     wpi-32u4-library
 ~~~
 
 You're done.
@@ -59,7 +59,7 @@ Accessing exmaples in platformio is a little trickier than Arduino. Because plat
 
 Several example sketches are available that show how to use the library. You can access them from the Arduino IDE by opening the "File" menu, selecting "Examples", and then selecting "wpi-32u4-library". If you cannot find these examples, the library was probably installed incorrectly and you should retry the installation instructions above.
 
-### Not all examples have been converted to the wpi version of the library. At the moment we've updated the following:
+### Not all examples have been converted to the wpi version of the library. At the moment we've included the following:
 
 * MotorTest
 * Encoders
@@ -68,6 +68,7 @@ Several example sketches are available that show how to use the library. You can
 * RemoteControlISR
 * Buttons
 * BlinkLEDs
+* IRDirectionFinder (uses VSCode structure)
 
 ## Classes and functions
 
@@ -125,6 +126,7 @@ Some other library files (LCD, buzzer) have been removed, since they conflict wi
 
 ## Version history
 
+* 2.6.0 (2021-04-04): Added in a library and example for the IR Positionn sensor from DF Robot. Also includes improvements to some libraries. Now includes a Timer class for software timers.
 * 2.5.0 (2021-01-30): Previous versions add IR remote with interrupts handled automatically (so long as you use either an external interrupt pin or PCINT). IMU updates.
 * 2.1.0 (2020-09-06): Primary release for WPI courses.
 * 1.0.2 (2017-07-17): Fixed a bug that caused errors for the right encoder to be reported as errors for the left encoder.
