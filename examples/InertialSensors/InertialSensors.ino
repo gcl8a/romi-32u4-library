@@ -23,8 +23,6 @@
 
 LSM6 imu;
 
-char report[120];
-
 void setup()
 {
   Wire.begin();
