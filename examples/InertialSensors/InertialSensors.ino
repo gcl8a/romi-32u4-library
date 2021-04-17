@@ -52,26 +52,47 @@ void setup()
   imu.setFullScaleAcc(LSM6::ACC_FS16);
 }
 
+Romi32U4ButtonA buttonA;
+Romi32U4ButtonB buttonB;
+Romi32U4ButtonC buttonC;
+Romi32U4Motors motors;
+
+bool showAcc = true;
+bool showGyro = false;
+
+
 void loop()
 {
+  if(buttonA.isPressed()) motors.setEfforts(200, 200);
+  else motors.setEfforts(0,0);
+
+  if(buttonB.getSingleDebouncedPress()) showAcc = !showAcc;
+  if(buttonC.getSingleDebouncedPress()) showGyro = !showGyro;
+
   if(imu.getStatus() & 0x02)
   {
     imu.read();
 
-    snprintf_P(report, sizeof(report),
-      PSTR("A: %6d %6d %6d    G: %6d %6d %6d   DPS: "),
-      imu.a.x, imu.a.y, imu.a.z,
-      imu.g.x, imu.g.y, imu.g.z);
-      
-      Serial.print(millis());
-      Serial.print('\t');
-      Serial.print(report);
+    if(showAcc)
+    {
+      Serial.print(imu.a.x);
+      Serial.print(' ');
+      Serial.print(imu.a.y);
+      Serial.print(' ');
+      Serial.print(imu.a.z);
+      Serial.print(' ');
+    }
 
-      Serial.print(imu.dps.x);
+    if(showGyro)
+    {
+      Serial.print(imu.g.x);
       Serial.print(' ');
-      Serial.print(imu.dps.y);
+      Serial.print(imu.g.y);
       Serial.print(' ');
-      Serial.print(imu.dps.z);
-      Serial.print('\n');
+      Serial.print(imu.g.z);
+      Serial.print(' ');
+    }
+
+    Serial.print('\n');
   }
 }

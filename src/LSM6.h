@@ -129,9 +129,9 @@ public:
     uint8_t getStatus(void) {return readReg(LSM6::STATUS_REG);}
 
     // vector functions
-    template <typename Ta, typename Tb, typename To> static void vector_cross(const vector<Ta> *a, const vector<Tb> *b, vector<To> *out);
-    template <typename Ta, typename Tb> static float vector_dot(const vector<Ta> *a, const vector<Tb> *b);
-    static void vector_normalize(vector<float> *a);
+    //template <typename Ta, typename Tb, typename To> static void vector_cross(const vector<Ta> *a, const vector<Tb> *b, vector<To> *out);
+    //template <typename Ta, typename Tb> static float vector_dot(const vector<Ta> *a, const vector<Tb> *b);
+    //static void vector_normalize(vector<float> *a);
 
   private:
     deviceType _device; // chip type
@@ -144,16 +144,16 @@ public:
 };
 
 
-template <typename Ta, typename Tb, typename To> void LSM6::vector_cross(const vector<Ta> *a, const vector<Tb> *b, vector<To> *out)
-{
-  out->x = (a->y * b->z) - (a->z * b->y);
-  out->y = (a->z * b->x) - (a->x * b->z);
-  out->z = (a->x * b->y) - (a->y * b->x);
-}
+// template <typename Ta, typename Tb, typename To> void LSM6::vector_cross(const vector<Ta> *a, const vector<Tb> *b, vector<To> *out)
+// {
+//   out->x = (a->y * b->z) - (a->z * b->y);
+//   out->y = (a->z * b->x) - (a->x * b->z);
+//   out->z = (a->x * b->y) - (a->y * b->x);
+// }
 
-template <typename Ta, typename Tb> float LSM6::vector_dot(const vector<Ta> *a, const vector<Tb> *b)
-{
-  return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
-}
+// template <typename Ta, typename Tb> float LSM6::vector_dot(const vector<Ta> *a, const vector<Tb> *b)
+// {
+//   return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
+// }
 
 #endif
