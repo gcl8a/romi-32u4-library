@@ -95,23 +95,42 @@ void LSM6::setFullScaleAcc(ACC_FS afs)
   }
 }
 
-void LSM6::setGyroDataOutputRate(GYRO_ODR rate)
+void LSM6::setGyroDataOutputRate(ODR rate)
 {
+  if(rate < 0 || rate > ODR166k) 
+  {
+    Serial.println(F("Illegal gyro ODR"));
+    return;
+  }
   uint8_t settings = readReg(LSM6::CTRL2_G);
   settings &= 0x0f; //clear ODR bits
-  switch (rate)
+  writeReg(LSM6::CTRL2_G, settings | (rate << 4));
+  // switch (rate)
+  // {
+  // case GYRO_ODR52:
+  //   writeReg(LSM6::CTRL2_G, settings | 0x30);
+  //   odrGyro = 52;
+  //   break;
+  // case GYRO_ODR104:
+  //   writeReg(LSM6::CTRL2_G, settings | 0x40);
+  //   odrGyro = 104;
+  //   break;
+  // default:
+  //   Serial.println("Error setting gyro data rate!");
+  // }
+}
+
+void LSM6::setAccDataOutputRate(ODR rate)
+{
+  if(rate < 0 || rate > ODR166k) 
   {
-  case GYRO_ODR52:
-    writeReg(LSM6::CTRL2_G, settings | 0x30);
-    odrGyro = 52;
-    break;
-  case GYRO_ODR104:
-    writeReg(LSM6::CTRL2_G, settings | 0x40);
-    odrGyro = 104;
-    break;
-  default:
-    Serial.println("Error setting gyro data rate!");
+    Serial.println(F("Illegal acc ODR"));
+    return;
   }
+
+  uint8_t settings = readReg(LSM6::CTRL1_XL);
+  settings &= 0x0f; //clear ODR bits
+  writeReg(LSM6::CTRL1_XL, settings | (rate << 4));
 }
 
 bool LSM6::init(deviceType device, sa0State sa0)

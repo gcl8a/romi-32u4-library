@@ -16,7 +16,17 @@ class LSM6
 
     enum ACC_FS {ACC_FS2, ACC_FS4, ACC_FS8, ACC_FS16};
     enum GYRO_FS {GYRO_FS245, GYRO_FS500, GYRO_FS1000, GYRO_FS2000};
-    enum GYRO_ODR {GYRO_ODR52, GYRO_ODR104};
+    enum ODR 
+    {
+      ODR13 = 0x1, 
+      ODR26 = 0x2, 
+      ODR52 = 0x3, 
+      ODR104 = 0x4, 
+      ODR208 = 0x5, 
+      ODR416 = 0x6, 
+      ODR833 = 0x7,
+      ODR166k = 0x8
+    };
 
     // register addresses
     enum regAddr
@@ -98,7 +108,7 @@ class LSM6
     //conversion factors
     float mdps = 0;
     float mg = 0;
-    float odrGyro = 0;
+    //float odrGyro = 0;
 
     uint8_t last_status; // status of last I2C transmission
 
@@ -120,7 +130,8 @@ public:
     void setFullScaleGyro(GYRO_FS gfs);
     void setFullScaleAcc(ACC_FS afs);
 
-    void setGyroDataOutputRate(GYRO_ODR);
+    void setGyroDataOutputRate(ODR);
+    void setAccDataOutputRate(ODR);
 
     void setTimeout(uint16_t timeout);
     uint16_t getTimeout(void);
