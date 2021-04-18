@@ -40,14 +40,8 @@ void setup()
 
   imu.enableDefault();
 
-  // Set the gyro full scale to 1000 dps because the default
-  // value is too low, and leave the other settings the same.
-  imu.setFullScaleGyro(LSM6::GYRO_FS1000);
-  imu.setGyroDataOutputRate(LSM6::GYRO_ODR52);
-
-  // Set the accelerometer full scale to 16 g because the default
-  // value is too low, and leave the other settings the same.
-  imu.setFullScaleAcc(LSM6::ACC_FS16);
+  imu.setGyroDataOutputRate(LSM6::GYRO_ODR13);
+  imu.setAccDataOutputRate(LSM6::GYRO_ODR13);
 }
 
 Romi32U4ButtonA buttonA;
@@ -57,7 +51,6 @@ Romi32U4Motors motors;
 
 bool showAcc = true;
 bool showGyro = false;
-
 
 void loop()
 {
@@ -70,6 +63,9 @@ void loop()
   if(imu.getStatus() & 0x02)
   {
     imu.read();
+
+    Serial.print(millis());
+    Serial.print('\t');
 
     if(showAcc)
     {
