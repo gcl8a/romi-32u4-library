@@ -40,8 +40,8 @@ void setup()
 
   imu.enableDefault();
 
-  imu.setGyroDataOutputRate(LSM6::GYRO_ODR13);
-  imu.setAccDataOutputRate(LSM6::GYRO_ODR13);
+  imu.setGyroDataOutputRate(LSM6::ODR13);
+  imu.setAccDataOutputRate(LSM6::ODR13);
 }
 
 Romi32U4ButtonA buttonA;
