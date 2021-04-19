@@ -30,14 +30,16 @@ void Romi32U4Motors::init2()
     //
     // PWM frequency calculation
     // 16MHz / 1 (prescaler) / 2 (phase-correct) / 400 (top) = 20kHz
-    TCCR1A = 0xA8; //0b10101000; //gcl: added OCR1C for adding a third PWM on pin 11
-    TCCR1B = 0x11; //0b00010001;
-    ICR1 = 400;
+    TCCR1A = 0xAA; //0b10101010; //gcl: added OCR1C for adding a third PWM on pin 11; fast pwm
+    TCCR1B = 0x19; //0b00010001; //gcl: fast pwm
+    ICR1 = 420;    //runs at 38kHz; slightly lowers speed for given effort
 
     //set all three outputs to zero
     OCR1A = 0;
     OCR1B = 0;
-    OCR1C = 0;
+    OCR1C = 0; //make 38kHz signal on pin 11
+
+    FastGPIO::Pin<11>::setOutputLow();
 }
 
 void Romi32U4Motors::flipLeftMotor(bool flip)
