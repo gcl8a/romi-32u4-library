@@ -50,19 +50,19 @@ void LSM6::setFullScaleGyro(GYRO_FS gfs)
   switch (gfs)
   {
   case GYRO_FS245:
-    writeReg(LSM6::CTRL2_G, settings | 0b10000000);
+    writeReg(LSM6::CTRL2_G, settings | 0b00000000);
     mdps = 8.75;
     break;
   case GYRO_FS500:
-    writeReg(LSM6::CTRL2_G, settings | 0b10000100);
+    writeReg(LSM6::CTRL2_G, settings | 0b00000100);
     mdps = 17.5;
     break;
   case GYRO_FS1000:
-    writeReg(LSM6::CTRL2_G, settings | 0b10001000);
+    writeReg(LSM6::CTRL2_G, settings | 0b00001000);
     mdps = 35;
     break;
   case GYRO_FS2000:
-    writeReg(LSM6::CTRL2_G, settings | 0b10001100);
+    writeReg(LSM6::CTRL2_G, settings | 0b00001100);
     mdps = 70;
     break;
   default:
@@ -72,22 +72,24 @@ void LSM6::setFullScaleGyro(GYRO_FS gfs)
 
 void LSM6::setFullScaleAcc(ACC_FS afs)
 {
+  uint8_t settings = readReg(LSM6::CTRL1_XL);
+  settings &= 0xf0; //clear sensitivity bits
   switch (afs)
   {
   case ACC_FS2:
-    writeReg(LSM6::CTRL1_XL, 0b10000000);
+    writeReg(LSM6::CTRL1_XL, 0b00000000);
     mg = 0.061;
     break;
   case ACC_FS4:
-    writeReg(LSM6::CTRL1_XL, 0b10001000); //datasheet in error here?
+    writeReg(LSM6::CTRL1_XL, 0b00001000); 
     mg = 0.122;
     break;
   case ACC_FS8:
-    writeReg(LSM6::CTRL1_XL, 0b10001100);
+    writeReg(LSM6::CTRL1_XL, 0b00001100);
     mg = 0.244;
     break;
   case ACC_FS16:
-    writeReg(LSM6::CTRL1_XL, 0b10000100);
+    writeReg(LSM6::CTRL1_XL, 0b00000100);
     mg = 0.488;
     break;
   default:
@@ -105,19 +107,6 @@ void LSM6::setGyroDataOutputRate(ODR rate)
   uint8_t settings = readReg(LSM6::CTRL2_G);
   settings &= 0x0f; //clear ODR bits
   writeReg(LSM6::CTRL2_G, settings | (rate << 4));
-  // switch (rate)
-  // {
-  // case GYRO_ODR52:
-  //   writeReg(LSM6::CTRL2_G, settings | 0x30);
-  //   odrGyro = 52;
-  //   break;
-  // case GYRO_ODR104:
-  //   writeReg(LSM6::CTRL2_G, settings | 0x40);
-  //   odrGyro = 104;
-  //   break;
-  // default:
-  //   Serial.println("Error setting gyro data rate!");
-  // }
 }
 
 void LSM6::setAccDataOutputRate(ODR rate)
