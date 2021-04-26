@@ -28,8 +28,8 @@ private:
     IR_REPEAT,   //received repeat code (part of NEC protocol); last code will be returned
     IR_ACTIVE,   //have some bits, but not yet complete
     IR_COMPLETE, //a valid code has been received
-    IR_ERROR
-  }; //an error occurred; won't return a valid code
+    IR_ERROR     //an error occurred; won't return a valid code
+  }; 
 
   IR_STATE state = IR_READY; //a simple state machine for managing reception
 
