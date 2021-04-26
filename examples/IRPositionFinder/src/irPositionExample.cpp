@@ -26,7 +26,7 @@ IRDirectionFinder irFinder;
 
 void setup()
 {
-  Serial.begin(19200);
+  Serial.begin(115200);
   
   /*!
    *  @brief initailize the module.
