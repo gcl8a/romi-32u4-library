@@ -68,7 +68,7 @@ void IRDecoder::handleIRsensor(void)
     uint32_t codeLength = risingEdge - lastRisingEdge;
     lastRisingEdge = risingEdge;
 
-    // bits[index] = delta;
+    // bits[index] = delta; //used for debugging; obsolete
     
     if(delta > 8500 && delta < 9500) // received a start pulse
     {
