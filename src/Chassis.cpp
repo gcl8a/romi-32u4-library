@@ -26,3 +26,8 @@ void Chassis::loop(void)
         Serial.println(millis());
     }
 }
+
+void Chassis::updatePose(void)
+{
+    
+}

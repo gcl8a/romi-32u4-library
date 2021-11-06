@@ -9,7 +9,6 @@
 #define DIR_L 16
 #define DIR_R 15
 
-int16_t Romi32U4Motors::maxEffort = 300;
 
 // initialize timer1 to generate the proper PWM outputs to the motor drivers
 void Romi32U4Motors::initMotors()
@@ -114,3 +113,4 @@ int16_t Romi32U4Motors::getMaxEffort()
 {
     return maxEffort;
 }
+

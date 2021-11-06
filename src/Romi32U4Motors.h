@@ -43,14 +43,14 @@ public:
      * \param effort A number from -300 to 300 representing the effort and
      * direction of the left motor.  Values of -300 or less result in full effort
      * reverse, and values of 300 or more result in full effort forward. */
-  static void setLeftEffort(int16_t effort);
+  void setLeftEffort(int16_t effort);
 
   /** \brief Sets the effort for the right motor.
      *
      * \param effort A number from -300 to 300 representing the effort and
      * direction of the right motor. Values of -300 or less result in full effort
      * reverse, and values of 300 or more result in full effort forward. */
-  static void setRightEffort(int16_t effort);
+  void setRightEffort(int16_t effort);
 
   /** \brief Sets the effort for both motors.
      *
@@ -60,7 +60,7 @@ public:
      * \param rightEffort A number from -300 to 300 representing the speed and
      * direction of the right motor. Values of -300 or less result in full speed
      * reverse, and values of 300 or more result in full speed forward. */
-  static void setEfforts(int16_t leftEffort, int16_t rightEffort);
+  void setEfforts(int16_t leftEffort, int16_t rightEffort);
 
   /** \brief Turns turbo mode on or off.
      *
@@ -75,16 +75,16 @@ public:
      *
      * \param turbo If true, turns turbo mode on.
      *   If false, turns turbo mode off. */
-  static void allowTurbo(bool turbo);
+  void allowTurbo(bool turbo);
 
   /** \brief returns the Max Effort for the motors
      * 
      * \return The maximum effort for the motors based on the turbo setting */
-  static int16_t getMaxEffort();
+  int16_t getMaxEffort();
 
-  static inline void init()
+  inline void init()
   {
-    static bool initialized = false;
+    bool initialized = false;
 
     if (!initialized)
     {
@@ -94,16 +94,34 @@ public:
     }
   }
   
-  static inline void motorISR(void);
+  inline void motorISR(void);
 
 private:
 
-  static void initMotors();
-  static void initEncoders();
-  static int16_t maxEffort;
+  void initMotors();
+  void initEncoders();
+  int16_t maxEffort = 300;
 
 public:
-   static uint8_t readyToPID;
+   uint8_t readyToPID = 0;
+
+   int16_t prevCountLeft;
+   int16_t prevCountRight;
+
+   int16_t speedLeft;
+   int16_t speedRight;
+
+   volatile bool lastLeftA;
+   volatile bool lastLeftB;
+   volatile bool lastRightA;
+   volatile bool lastRightB;
+
+   volatile bool errorLeft;
+   volatile bool errorRight;
+
+   volatile int16_t countLeft;
+   volatile int16_t countRight;
+
 
 public:
       /*! Returns the number of counts that have been detected from the left-side
@@ -114,20 +132,20 @@ public:
      * The count is returned as a signed 16-bit integer.  When the count goes
      * over 32767, it will overflow down to -32768.  When the count goes below
      * -32768, it will overflow up to 32767. */
-    static int16_t getCountsLeft();
+    int16_t getCountsLeft();
 
     /*! This function is just like getCountsLeft() except it applies to the
      *  right-side encoder. */
-    static int16_t getCountsRight();
+    int16_t getCountsRight();
 
     /*! This function is just like getCountsLeft() except it also clears the
      *  counts before returning.  If you call this frequently enough, you will
      *  not have to worry about the count overflowing. */
-    static int16_t getCountsAndResetLeft();
+    int16_t getCountsAndResetLeft();
 
     /*! This function is just like getCountsAndResetLeft() except it applies to
      *  the right-side encoder. */
-    static int16_t getCountsAndResetRight();
+    int16_t getCountsAndResetRight();
 
     /*! This function returns true if an error was detected on the left-side
      * encoder.  It resets the error flag automatically, so it will only return
@@ -141,10 +159,14 @@ public:
      * service routine for the encoders could not be started soon enough.  If
      * you get encoder errors, make sure you are not disabling interrupts for
      * extended periods of time in your code. */
-    static bool checkErrorLeft();
+    bool checkErrorLeft();
 
     /*! This function is just like checkErrorLeft() except it applies to
      *  the right-side encoder. */
-    static bool checkErrorRight();
+    bool checkErrorRight();
 
+    void leftISR(void);
+    void rightISR(void);
 };
+
+extern Romi32U4Motors motors;

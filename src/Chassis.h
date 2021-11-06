@@ -15,5 +15,9 @@ public:
     void loop(void);
     void idle(void);
 
+    void updatePose(void);
+
     void setMotorEfforts(int leftSpeed, int rightSpeed);
 };
+
+extern Chassis chassis;

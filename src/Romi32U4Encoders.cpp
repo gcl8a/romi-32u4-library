@@ -7,25 +7,15 @@
 
 #include <pcint.h>
 
+#include <Chassis.h>
+
 #define LEFT_XOR   8
 #define LEFT_B     IO_E2
 #define RIGHT_XOR  7
 #define RIGHT_B    23
 
-static volatile bool lastLeftA;
-static volatile bool lastLeftB;
-static volatile bool lastRightA;
-static volatile bool lastRightB;
 
-static volatile bool errorLeft;
-static volatile bool errorRight;
-
-// These count variables are uint16_t instead of int16_t because
-// signed integer overflow is undefined behavior in C++.
-static volatile uint16_t countLeft;
-static volatile uint16_t countRight;
-
-static void leftISR()
+void Romi32U4Motors::leftISR()
 {
     bool newLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
     bool newLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ newLeftB;
@@ -41,7 +31,7 @@ static void leftISR()
     lastLeftB = newLeftB;
 }
 
-static void rightISR()
+void Romi32U4Motors::rightISR()
 {
     bool newRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
     bool newRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ newRightB;
@@ -118,6 +108,9 @@ bool Romi32U4Motors::checkErrorRight()
     return error;
 }
 
+void leftISR(void) {motors.leftISR();}
+void rightISR(void) {motors.rightISR();}
+
 void Romi32U4Motors::initEncoders(void)
 {    
     Serial.println("initEncoders()");
@@ -128,12 +121,12 @@ void Romi32U4Motors::initEncoders(void)
     FastGPIO::Pin<RIGHT_B>::setInputPulledUp();
 
     //attach a PC interrupt
-    attachPCInt(PCINT4, leftISR);
+    attachPCInt(PCINT4, ::leftISR);
 
     // Enable interrupt on PE6 for the right encoder.  We use attachInterrupt
     // instead of defining ISR(INT6_vect) ourselves so that this class will be
     // compatible with other code that uses attachInterrupt.
-    attachInterrupt(4, rightISR, CHANGE);
+    attachInterrupt(4, ::rightISR, CHANGE);
 
     // Initialize the variables.  It's good to do this after enabling the
     // interrupts in case the interrupts fired by accident as we were enabling
@@ -151,8 +144,16 @@ void Romi32U4Motors::initEncoders(void)
     Serial.println("/initEncoders()");
 }
 
-uint8_t Romi32U4Motors::readyToPID =  0;
+void Romi32U4Motors::motorISR(void) 
+{
+    speedLeft = countLeft - prevCountLeft;
+    prevCountLeft = countLeft;
 
+    speedRight = countRight - prevCountRight;
+    prevCountRight = countRight;
+
+    readyToPID = 1;
+}
 /*
  * ISR for timing. On overflow, it takes a 'snapshot' of the encoder counts and raises a flag to let
  * the main program it is time to execute the PID calculations.
@@ -162,6 +163,6 @@ ISR(TIMER4_OVF_vect)
 //   //Capture a "snapshot" of the encoder counts for later processing
 //   countsLeft = encoders.getCountsLeft();
 //   countsRight = encoders.getCountsRight();
-
-   Romi32U4Motors::readyToPID = 1;
+    motors.motorISR();
+    motors.readyToPID = 1;
 }
