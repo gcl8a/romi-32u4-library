@@ -37,10 +37,12 @@ void IRDecoder::init(void)
 
   if(digitalPinToInterrupt(pin) != NOT_AN_INTERRUPT)
   {
+    Serial.println("Attaching ISR");
     attachInterrupt(digitalPinToInterrupt(pin), ::handleIRsensor, CHANGE);
   }
   else if(digitalPinToPCInterrupt(pin) != NOT_AN_INTERRUPT)
   {
+    Serial.println("Attaching PC_ISR");
     attachPCInt(digitalPinToPCInterrupt(pin), ::handleIRsensor);
   }
   else

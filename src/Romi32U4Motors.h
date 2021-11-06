@@ -4,39 +4,40 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include <stdint.h>
-#include <FastGPIO.h>
+//#include <FastGPIO.h>
 
 /*! \brief Controls motor effort and direction on the Romi 32U4.
  *
  * This library uses Timer 1, so it will conflict with any other libraries using
- * that timer. */
+ * that timer. 
+ * 
+ * Also reads counts from the encoders on the Romi 32U4.
+ *
+ * This class allows you to read counts from the encoders on the Romi 32U4,
+ * which lets you tell how much each motor has turned and in what direction.
+ *
+ * The encoders are monitored in the background using interrupts, so your code
+ * can perform other tasks without missing encoder counts.
+ *
+ * To read the left encoder, this class uses an interrupt service routine (ISR)
+ * for PCINT0_vect, so there will be a compile-time conflict with any other code
+ * that defines a pin-change ISR.
+ *
+ * To read the right encoder, this class calls
+ * [attachInterrupt()](http://arduino.cc/en/Reference/attachInterrupt), so there
+ * will be a compile-time conflict with any other code that defines an ISR for
+ * an external interrupt directly instead of using attachInterrupt().
+ *
+ * The standard Romi motors have a gear ratio of 3952:33 (approximately 120:1).
+ * The standard Romi encoders give 12 counts per revolution.  Therefore, one
+ * revolution of a Romi wheel corresponds to 12*3952/33 (approximately 1437.09)
+ * encoder counts as returned by this library.
+ */
 class Romi32U4Motors
 {
 public:
-  /** \brief Flips the direction of the left motor.
-     *
-     * You can call this function with an argument of \c true if the left motor
-     * of your Romi was not wired in the standard way and you want a
-     * positive effort argument to correspond to forward movement.
-     *
-     * \param flip If true, then positive motor effort will correspond to the
-     * direction pin being high.  If false, then positive motor effort will
-     * correspond to the direction pin being low.
-     */
-  static void flipLeftMotor(bool flip);
-
-  /** \brief Flips the direction of the right motor.
-     *
-     * You can call this function with an argument of \c true if the right motor
-     * of your Romi was not wired in the standard way and you want a
-     * positive effort argument to correspond to forward movement.
-     *
-     * \param flip If true, then positive motor effort will correspond to the
-     * direction pin being high.  If false, then positive motor effort will
-     * correspond to the direction pin being low. */
-  static void flipRightMotor(bool flip);
-
   /** \brief Sets the effort for the left motor.
      *
      * \param effort A number from -300 to 300 representing the effort and
@@ -88,15 +89,60 @@ public:
     if (!initialized)
     {
       initialized = true;
-      init2();
+      initMotors();
+      initEncoders();
     }
   }
+  
+  static inline void motorISR(void);
 
 private:
 
-  static void init2();
-
+  static void initMotors();
+  static void initEncoders();
   static int16_t maxEffort;
-  static bool flipLeft;
-  static bool flipRight;
+
+
+public:
+      /*! Returns the number of counts that have been detected from the left-side
+     * encoder.  These counts start at 0.  Positive counts correspond to forward
+     * movement of the left side of the Romi, while negative counts correspond
+     * to backwards movement.
+     *
+     * The count is returned as a signed 16-bit integer.  When the count goes
+     * over 32767, it will overflow down to -32768.  When the count goes below
+     * -32768, it will overflow up to 32767. */
+    static int16_t getCountsLeft();
+
+    /*! This function is just like getCountsLeft() except it applies to the
+     *  right-side encoder. */
+    static int16_t getCountsRight();
+
+    /*! This function is just like getCountsLeft() except it also clears the
+     *  counts before returning.  If you call this frequently enough, you will
+     *  not have to worry about the count overflowing. */
+    static int16_t getCountsAndResetLeft();
+
+    /*! This function is just like getCountsAndResetLeft() except it applies to
+     *  the right-side encoder. */
+    static int16_t getCountsAndResetRight();
+
+    /*! This function returns true if an error was detected on the left-side
+     * encoder.  It resets the error flag automatically, so it will only return
+     * true if an error was detected since the last time checkErrorLeft() was
+     * called.
+     *
+     * If an error happens, it means that both of the encoder outputs changed at
+     * the same time from the perspective of the ISR, so the ISR was unable to
+     * tell what direction the motor was moving, and the encoder count could be
+     * inaccurate.  The most likely cause for an error is that the interrupt
+     * service routine for the encoders could not be started soon enough.  If
+     * you get encoder errors, make sure you are not disabling interrupts for
+     * extended periods of time in your code. */
+    static bool checkErrorLeft();
+
+    /*! This function is just like checkErrorLeft() except it applies to
+     *  the right-side encoder. */
+    static bool checkErrorRight();
+
 };

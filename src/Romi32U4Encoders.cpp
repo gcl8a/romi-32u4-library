@@ -1,7 +1,7 @@
 // Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
 
 #include <Arduino.h>
-#include <Romi32U4Encoders.h>
+#include <Romi32U4Motors.h>
 #include <FastGPIO.h>
 #include <avr/interrupt.h>
 
@@ -57,8 +57,69 @@ static void rightISR()
     lastRightB = newRightB;
 }
 
-void Romi32U4Encoders::init2()
+
+int16_t Romi32U4Motors::getCountsLeft()
 {
+    init();
+
+    cli();
+    int16_t counts = countLeft;
+    sei();
+    return counts;
+}
+
+int16_t Romi32U4Motors::getCountsRight()
+{
+    init();
+
+    cli();
+    int16_t counts = countRight;
+    sei();
+    return counts;
+}
+
+int16_t Romi32U4Motors::getCountsAndResetLeft()
+{
+    init();
+
+    cli();
+    int16_t counts = countLeft;
+    countLeft = 0;
+    sei();
+    return counts;
+}
+
+int16_t Romi32U4Motors::getCountsAndResetRight()
+{
+    init();
+
+    cli();
+    int16_t counts = countRight;
+    countRight = 0;
+    sei();
+    return counts;
+}
+
+bool Romi32U4Motors::checkErrorLeft()
+{
+    init();
+
+    bool error = errorLeft;
+    errorLeft = 0;
+    return error;
+}
+
+bool Romi32U4Motors::checkErrorRight()
+{
+    init();
+
+    bool error = errorRight;
+    errorRight = 0;
+    return error;
+}
+
+void Romi32U4Motors::initEncoders(void)
+{    
     // Set the pins as pulled-up inputs.
     FastGPIO::Pin<LEFT_XOR>::setInputPulledUp();
     FastGPIO::Pin<LEFT_B>::setInputPulledUp();
@@ -87,62 +148,15 @@ void Romi32U4Encoders::init2()
     errorRight = 0;
 }
 
-int16_t Romi32U4Encoders::getCountsLeft()
+/*
+ * ISR for timing. On overflow, it takes a 'snapshot' of the encoder counts and raises a flag to let
+ * the main program it is time to execute the PID calculations.
+ */
+ISR(TIMER4_OVF_vect)
 {
-    init();
+//   //Capture a "snapshot" of the encoder counts for later processing
+//   countsLeft = encoders.getCountsLeft();
+//   countsRight = encoders.getCountsRight();
 
-    cli();
-    int16_t counts = countLeft;
-    sei();
-    return counts;
-}
-
-int16_t Romi32U4Encoders::getCountsRight()
-{
-    init();
-
-    cli();
-    int16_t counts = countRight;
-    sei();
-    return counts;
-}
-
-int16_t Romi32U4Encoders::getCountsAndResetLeft()
-{
-    init();
-
-    cli();
-    int16_t counts = countLeft;
-    countLeft = 0;
-    sei();
-    return counts;
-}
-
-int16_t Romi32U4Encoders::getCountsAndResetRight()
-{
-    init();
-
-    cli();
-    int16_t counts = countRight;
-    countRight = 0;
-    sei();
-    return counts;
-}
-
-bool Romi32U4Encoders::checkErrorLeft()
-{
-    init();
-
-    bool error = errorLeft;
-    errorLeft = 0;
-    return error;
-}
-
-bool Romi32U4Encoders::checkErrorRight()
-{
-    init();
-
-    bool error = errorRight;
-    errorRight = 0;
-    return error;
+//   PIDController::readyToPID = 1;
 }
