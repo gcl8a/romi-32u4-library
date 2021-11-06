@@ -1,6 +1,7 @@
 #include <Chassis.h>
 
 Romi32U4Motors motors;
+//int8_t Chassis::readyToPID = 0;
 
 void Chassis::init(void) {motors.init();}
 
@@ -28,10 +29,12 @@ void Chassis::loop(void)
     {
         motors.readyToPID = 0;
         Serial.println(millis());
+
+        updatePose();
     }
 }
 
 void Chassis::updatePose(void)
 {
-    
+    int16_t speedLeft = motors.speedLeft;   
 }

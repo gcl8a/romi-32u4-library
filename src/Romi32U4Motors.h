@@ -84,7 +84,7 @@ public:
      * \return The maximum effort for the motors based on the turbo setting */
   int16_t getMaxEffort();
 
-  Romi32U4Motors::Romi32U4Motors(void) : pidCtrlLeft(1), pidCtrlRight(1)
+   Romi32U4Motors(void) : pidCtrlLeft(1), pidCtrlRight(1)
   {}
 
   inline void init()
@@ -110,8 +110,8 @@ private:
 public:
    uint8_t readyToPID = 0;
 
-   int16_t prevCountLeft;
-   int16_t prevCountRight;
+   volatile int16_t prevCountLeft;
+   volatile int16_t prevCountRight;
 
    int16_t speedLeft;
    int16_t speedRight;
@@ -119,20 +119,23 @@ public:
    int16_t targetSpeedLeft = 0;
    int16_t targetSpeedRight = 0;
 
-   volatile bool lastLeftA;
-   volatile bool lastLeftB;
-   volatile bool lastRightA;
-   volatile bool lastRightB;
+   volatile int16_t countLeft = 0;
+   volatile int16_t countRight = 0;
 
-   volatile bool errorLeft;
-   volatile bool errorRight;
+   volatile int16_t lastLeftA = 0;
+   volatile int16_t lastLeftB = 0;
+
+   volatile int16_t lastRightA = 0;
+   volatile int16_t lastRightB = 0;
+
+   volatile int16_t deltaLeft = 0;
+   volatile int16_t deltaRight = 0;
+
+   // volatile bool errorLeft;
+   // volatile bool errorRight;
 
    PIDController pidCtrlLeft;
    PIDController pidCtrlRight;
-
-   // volatile int16_t countLeft;
-   // volatile int16_t countRight;
-
 
 public:
       /*! Returns the number of counts that have been detected from the left-side

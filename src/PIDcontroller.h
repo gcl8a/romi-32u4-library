@@ -5,7 +5,7 @@
 class PIDController
 {
 private:
-    float target = 0;
+    //float target = 0;
 
     float Kp, Ki, Kd;
     float currError = 0;
@@ -18,7 +18,7 @@ private:
 
     float currEffort = 0;
 public:
-    static volatile uint8_t readyToPID;   //a flag that is set when the PID timer overflows
+    //static volatile uint8_t readyToPID;   //a flag that is set when the PID timer overflows
 
 public:
     PIDController(float p, float i = 0, float d = 0, float bound = 0) : Kp(p), Ki(i), Kd(d), errorBound(bound) {}

@@ -8,6 +8,9 @@ class Chassis
 protected:
 
 public:
+//    static int8_t readyToPID;
+
+public:
     Chassis(void) {}
     void init(void);
     void loop(void);

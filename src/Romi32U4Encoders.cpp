@@ -14,8 +14,6 @@
 #define RIGHT_XOR  7
 #define RIGHT_B    23
 
-volatile int16_t countLeft = 0;
-volatile int16_t countRight = 0;
 
 void Romi32U4Motors::leftISR()
 {
@@ -24,10 +22,10 @@ void Romi32U4Motors::leftISR()
 
     countLeft += (lastLeftA ^ newLeftB) - (newLeftA ^ lastLeftB);
 
-    if((lastLeftA ^ newLeftA) & (lastLeftB ^ newLeftB))
-    {
-        errorLeft = true;
-    }
+    // if((lastLeftA ^ newLeftA) & (lastLeftB ^ newLeftB))
+    // {
+    //     errorLeft = true;
+    // }
 
     lastLeftA = newLeftA;
     lastLeftB = newLeftB;
@@ -40,10 +38,10 @@ void Romi32U4Motors::rightISR()
 
     countRight += (lastRightA ^ newRightB) - (newRightA ^ lastRightB);
 
-    if((lastRightA ^ newRightA) & (lastRightB ^ newRightB))
-    {
-        errorRight = true;
-    }
+    // if((lastRightA ^ newRightA) & (lastRightB ^ newRightB))
+    // {
+    //     errorRight = true;
+    // }
 
     lastRightA = newRightA;
     lastRightB = newRightB;
@@ -92,23 +90,23 @@ int16_t Romi32U4Motors::getCountsAndResetRight()
     return counts;
 }
 
-bool Romi32U4Motors::checkErrorLeft()
-{
-    init();
+// bool Romi32U4Motors::checkErrorLeft()
+// {
+//     init();
 
-    bool error = errorLeft;
-    errorLeft = 0;
-    return error;
-}
+//     bool error = errorLeft;
+//     errorLeft = 0;
+//     return error;
+// }
 
-bool Romi32U4Motors::checkErrorRight()
-{
-    init();
+// bool Romi32U4Motors::checkErrorRight()
+// {
+//     init();
 
-    bool error = errorRight;
-    errorRight = 0;
-    return error;
-}
+//     bool error = errorRight;
+//     errorRight = 0;
+//     return error;
+// }
 
 void leftISR(void) {motors.leftISR();}
 void rightISR(void) {motors.rightISR();}
@@ -136,12 +134,12 @@ void Romi32U4Motors::initEncoders(void)
     lastLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
     lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
     countLeft = 0;
-    errorLeft = 0;
+    //errorLeft = 0;
 
     lastRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
     lastRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ lastRightB;
     countRight = 0;
-    errorRight = 0;
+    //errorRight = 0;
 
     Serial.println("/initEncoders()");
 }
@@ -162,9 +160,5 @@ void Romi32U4Motors::motorISR(void)
  */
 ISR(TIMER4_OVF_vect)
 {
-//   //Capture a "snapshot" of the encoder counts for later processing
-//   countsLeft = encoders.getCountsLeft();
-//   countsRight = encoders.getCountsRight();
     motors.motorISR();
-    motors.readyToPID = 1;
 }
