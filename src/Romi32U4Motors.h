@@ -6,6 +6,8 @@
 
 #include <Arduino.h>
 #include <stdint.h>
+#include <PIDController.h>
+
 //#include <FastGPIO.h>
 
 /*! \brief Controls motor effort and direction on the Romi 32U4.
@@ -111,6 +113,9 @@ public:
    int16_t speedLeft;
    int16_t speedRight;
 
+   int16_t targetSpeedLeft = 0;
+   int16_t targetSpeedRight = 0;
+
    volatile bool lastLeftA;
    volatile bool lastLeftB;
    volatile bool lastRightA;
@@ -119,8 +124,11 @@ public:
    volatile bool errorLeft;
    volatile bool errorRight;
 
-   volatile int16_t countLeft;
-   volatile int16_t countRight;
+   PIDController pidCtrlLeft;
+   PIDController pidCtrlRight;
+
+   // volatile int16_t countLeft;
+   // volatile int16_t countRight;
 
 
 public:

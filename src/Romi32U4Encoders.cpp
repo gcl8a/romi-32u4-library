@@ -14,6 +14,8 @@
 #define RIGHT_XOR  7
 #define RIGHT_B    23
 
+volatile int16_t countLeft = 0;
+volatile int16_t countRight = 0;
 
 void Romi32U4Motors::leftISR()
 {
