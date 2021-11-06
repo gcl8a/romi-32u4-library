@@ -19,6 +19,7 @@ public:
     void updatePose(void);
 
     void setMotorEfforts(int leftSpeed, int rightSpeed);
+    void setTwist(float forwardSpeed, float turningSpeed);
 };
 
 extern Chassis chassis;

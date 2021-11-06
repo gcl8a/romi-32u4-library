@@ -39,6 +39,10 @@
  */
 class Romi32U4Motors
 {
+private:
+   enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED};
+   CTRL_MODE ctrlMode = CTRL_DIRECT;
+   
 public:
   /** \brief Sets the effort for the left motor.
      *
@@ -85,7 +89,7 @@ public:
   int16_t getMaxEffort();
 
    Romi32U4Motors(void) : pidCtrlLeft(1), pidCtrlRight(1)
-  {}
+   {}
 
   inline void init()
   {
@@ -183,6 +187,8 @@ public:
     void rightISR(void);
 
     void updateMotors(void);
+
+    void setTargetSpeeds(int16_t left, int16_t right);
 };
 
 extern Romi32U4Motors motors;

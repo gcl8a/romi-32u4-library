@@ -99,6 +99,8 @@ void Romi32U4Motors::setRightEffort(int16_t effort)
 
 void Romi32U4Motors::setEfforts(int16_t leftEffort, int16_t rightEffort)
 {
+    ctrlMode = CTRL_DIRECT;
+
     setLeftEffort(leftEffort);
     setRightEffort(rightEffort);
 }
@@ -115,9 +117,25 @@ int16_t Romi32U4Motors::getMaxEffort()
 
 void Romi32U4Motors::updateMotors(void)
 {
-    int16_t effortLeft = pidCtrlLeft.calcEffort(targetSpeedLeft - speedLeft);
-    int16_t effortRight = pidCtrlRight.calcEffort(targetSpeedRight - speedRight);
+    if(ctrlMode == CTRL_SPEED)
+    {
+        int16_t effortLeft = pidCtrlLeft.calcEffort(targetSpeedLeft - speedLeft);
+        int16_t effortRight = pidCtrlRight.calcEffort(targetSpeedRight - speedRight);
 
-    setLeftEffort(effortLeft);
-    setRightEffort(effortRight);
+        setLeftEffort(effortLeft);
+        setRightEffort(effortRight);
+    }
+}
+
+void Romi32U4Motors::setTargetSpeeds(int16_t left, int16_t right)
+{
+    targetSpeedLeft = left;
+    targetSpeedRight = right;
+
+    if(ctrlMode != CTRL_SPEED)
+    {
+        //do we need to do anything here?
+    }
+
+    ctrlMode = CTRL_SPEED;
 }

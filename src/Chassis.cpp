@@ -36,5 +36,10 @@ void Chassis::loop(void)
 
 void Chassis::updatePose(void)
 {
-    int16_t speedLeft = motors.speedLeft;   
+    int16_t deltaLeft = motors.speedLeft;   
+}
+
+void Chassis::setTwist(float forwardSpeed, float turningSpeed)
+{
+    motors.setTargetSpeeds(20, 20);
 }
