@@ -181,6 +181,8 @@ public:
 
     void leftISR(void);
     void rightISR(void);
+
+    void updateMotors(void);
 };
 
 extern Romi32U4Motors motors;

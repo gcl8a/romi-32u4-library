@@ -113,3 +113,11 @@ int16_t Romi32U4Motors::getMaxEffort()
     return maxEffort;
 }
 
+void Romi32U4Motors::updateMotors(void)
+{
+    int16_t effortLeft = pidCtrlLeft.calcEffort(targetSpeedLeft - speedLeft);
+    int16_t effortRight = pidCtrlRight.calcEffort(targetSpeedRight - speedRight);
+
+    setLeftEffort(effortLeft);
+    setRightEffort(effortRight);
+}
