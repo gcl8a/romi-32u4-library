@@ -1,5 +1,9 @@
 #include <Chassis.h>
 
+Romi32U4Motors motors;
+
+void Chassis::init(void) {motors.init();}
+
 void Chassis::idle(void)
 {
   // //turn off LED

@@ -9,7 +9,6 @@
 #define DIR_L 16
 #define DIR_R 15
 
-
 // initialize timer1 to generate the proper PWM outputs to the motor drivers
 void Romi32U4Motors::initMotors()
 {

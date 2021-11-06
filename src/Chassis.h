@@ -2,16 +2,14 @@
 
 #include <Arduino.h>
 #include <Romi32U4Motors.h>
-
+    
 class Chassis
 {
 protected:
-    Romi32U4Motors motors;
-    //Romi32U4Encoders encoders;
 
 public:
     Chassis(void) {}
-    void init(void) {motors.init();}
+    void init(void);
     void loop(void);
     void idle(void);
 
