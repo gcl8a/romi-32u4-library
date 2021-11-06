@@ -14,6 +14,8 @@ int16_t Romi32U4Motors::maxEffort = 300;
 // initialize timer1 to generate the proper PWM outputs to the motor drivers
 void Romi32U4Motors::initMotors()
 {
+    Serial.println("initMotors()");
+
     FastGPIO::Pin<PWM_L>::setOutputLow();
     FastGPIO::Pin<PWM_R>::setOutputLow();
     FastGPIO::Pin<DIR_L>::setOutputLow();
@@ -51,6 +53,8 @@ void Romi32U4Motors::initMotors()
     TIMSK4 = 0x04; //enable overflow interrupt
     
     interrupts(); //re-enable interrupts
+
+    Serial.println("/initMotors()");
 }
 
 void Romi32U4Motors::setLeftEffort(int16_t effort)

@@ -120,6 +120,7 @@ bool Romi32U4Motors::checkErrorRight()
 
 void Romi32U4Motors::initEncoders(void)
 {    
+    Serial.println("initEncoders()");
     // Set the pins as pulled-up inputs.
     FastGPIO::Pin<LEFT_XOR>::setInputPulledUp();
     FastGPIO::Pin<LEFT_B>::setInputPulledUp();
@@ -146,7 +147,11 @@ void Romi32U4Motors::initEncoders(void)
     lastRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ lastRightB;
     countRight = 0;
     errorRight = 0;
+
+    Serial.println("/initEncoders()");
 }
+
+uint8_t Romi32U4Motors::readyToPID =  0;
 
 /*
  * ISR for timing. On overflow, it takes a 'snapshot' of the encoder counts and raises a flag to let
@@ -158,5 +163,5 @@ ISR(TIMER4_OVF_vect)
 //   countsLeft = encoders.getCountsLeft();
 //   countsRight = encoders.getCountsRight();
 
-//   PIDController::readyToPID = 1;
+   Romi32U4Motors::readyToPID = 1;
 }

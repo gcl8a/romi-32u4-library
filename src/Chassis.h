@@ -11,6 +11,8 @@ protected:
 
 public:
     Chassis(void) {}
+    void init(void) {motors.init();}
+    void loop(void);
     void idle(void);
 
     void setMotorEfforts(int leftSpeed, int rightSpeed);

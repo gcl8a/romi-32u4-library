@@ -102,6 +102,8 @@ private:
   static void initEncoders();
   static int16_t maxEffort;
 
+public:
+   static uint8_t readyToPID;
 
 public:
       /*! Returns the number of counts that have been detected from the left-side

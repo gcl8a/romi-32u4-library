@@ -17,3 +17,12 @@ void Chassis::setMotorEfforts(int leftSpeed, int rightSpeed)
 {
     motors.setEfforts(leftSpeed, rightSpeed);
 }
+
+void Chassis::loop(void)
+{
+    if(motors.readyToPID)
+    {
+        motors.readyToPID = 0;
+        Serial.println(millis());
+    }
+}
