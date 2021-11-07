@@ -131,6 +131,8 @@ void Romi32U4Motors::setTargetSpeeds(int16_t left, int16_t right)
     if(ctrlMode != CTRL_SPEED)
     {
         //do we need to do anything here?
+        pidCtrlLeft.resetSum();
+        pidCtrlRight.resetSum();
     }
 
     ctrlMode = CTRL_SPEED;

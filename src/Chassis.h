@@ -13,8 +13,8 @@ protected:
 public:
 //    static int8_t readyToPID;
 
-    enum CTRL_MODE {CRTL_DIRECT, CRTL_SPEED, CTRL_DRIVE_FOR, CTRL_TURN_FOR};
-    CTRL_MODE ctrlMode = CRTL_SPEED;
+    enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_DRIVE_FOR, CTRL_TURN_FOR};
+    CTRL_MODE ctrlMode = CTRL_SPEED;
 
     //used for driving/turning set amounts
     float currDist = 0;
@@ -36,6 +36,8 @@ public:
 
     void driveFor(float forwardDistance, float forwardSpeed, float turningSpeed = 0);
     void turnFor(float turnAngle, float turningSpeed, float forwardSpeed = 0);
+
+    bool checkMotionComplete(void);
 };
 
 extern Chassis chassis;

@@ -88,7 +88,7 @@ public:
      * \return The maximum effort for the motors based on the turbo setting */
   int16_t getMaxEffort();
 
-   Romi32U4Motors(void) : pidCtrlLeft(1,  0.1), pidCtrlRight(1, 0.1)
+   Romi32U4Motors(void) : pidCtrlLeft(5, 0.2), pidCtrlRight(5, 0.2)
    {}
 
   inline void init()

@@ -9,7 +9,7 @@ void Chassis::idle(void)
   //stop motors -- I use setEffort so that the wheels aren't locked
   motors.setEfforts(0, 0);
 
-  ctrlMode = CRTL_DIRECT;
+  ctrlMode = CTRL_DIRECT;
 }
 
 void Chassis::setMotorEfforts(int leftSpeed, int rightSpeed)
@@ -36,13 +36,15 @@ void Chassis::updatePose(void)
     int16_t deltaRight = motors.speedRight;
 
     ////////!!!!!!convert to actual distances...
-
+    float prevDist = currDist;
     currDist += ((deltaLeft + deltaRight) / 2.0) * cmPerEncoderTick;
+
+    float prevAngle = currAngle;
     currAngle += ((deltaRight - deltaLeft) * cmPerEncoderTick / wheelTrack) * (180.0 / 3.14);
 
     if(ctrlMode == CTRL_DRIVE_FOR) 
     {
-        if(currDist >= targetDist)
+        if((currDist >= targetDist) != (prevDist >= targetDist))
         {
             idle();
         }
@@ -50,7 +52,7 @@ void Chassis::updatePose(void)
 
     if(ctrlMode == CTRL_TURN_FOR) 
     {
-        if(currAngle >= targetAngle)
+        if((currAngle >= targetAngle) != (prevAngle >= targetAngle))
         {
             idle();
         }
@@ -60,13 +62,11 @@ void Chassis::updatePose(void)
 void Chassis::setTwist(float forwardSpeed, float turningSpeed)
 {
     Serial.print("setting speed targets: \t");
-    Serial.println(forwardSpeed);
 
     int16_t ticksPerIntervalFwd = (forwardSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
     int16_t ticksPerIntervalTurn = (wheelTrack * 3.14 / 180.0) * 
                         (turningSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
 
-    Serial.print("\t");
     Serial.print(ticksPerIntervalFwd);
     Serial.print("\t");
     Serial.println(ticksPerIntervalTurn);
@@ -90,4 +90,9 @@ void Chassis::turnFor(float turnAngle, float turningSpeed, float forwardSpeed)
     ctrlMode = CTRL_TURN_FOR;
 
     setTwist(forwardSpeed, turningSpeed);
+}
+
+bool Chassis::checkMotionComplete(void)
+{
+    return ctrlMode == CTRL_DIRECT;
 }
