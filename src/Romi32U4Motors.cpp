@@ -121,6 +121,11 @@ void Romi32U4Motors::updateMotors(void)
         setLeftEffort(effortLeft);
         setRightEffort(effortRight);
     }
+
+    // if(motionMode == MOVE_TO)
+    // {
+    //     if(prevCountLeft...)
+    // }
 }
 
 void Romi32U4Motors::setTargetSpeeds(int16_t left, int16_t right)

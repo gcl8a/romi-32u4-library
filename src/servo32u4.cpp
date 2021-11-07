@@ -25,7 +25,7 @@ void Servo32U4::Init(void)
 
     sei();
 
-    pinMode(5, OUTPUT); //don't forget to enable the pin as OUTPUT
+    pinMode(5, OUTPUT); // set pin as OUTPUT
 }
 
 void Servo32U4::Attach(void) //MUST USE PIN 5
