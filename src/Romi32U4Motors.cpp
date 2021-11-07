@@ -113,7 +113,7 @@ int16_t Romi32U4Motors::getMaxEffort()
 
 void Romi32U4Motors::updateMotors(void)
 {
-    if(ctrlMode == CTRL_SPEED)
+    if(ctrlMode == CTRL_SPEED || ctrlMode == CTRL_POS)
     {
         int16_t effortLeft = pidCtrlLeft.calcEffort(targetSpeedLeft - speedLeft);
         int16_t effortRight = pidCtrlRight.calcEffort(targetSpeedRight - speedRight);
@@ -122,9 +122,9 @@ void Romi32U4Motors::updateMotors(void)
         setRightEffort(effortRight);
     }
 
-    // if(motionMode == MOVE_TO)
+    // if(ctrlMode == CTRL_POS)
     // {
-    //     if(prevCountLeft...)
+    //     if(prevCountLeft > targetPosLeft )
     // }
 }
 
@@ -135,7 +135,7 @@ void Romi32U4Motors::setTargetSpeeds(int16_t left, int16_t right)
 
     if(ctrlMode != CTRL_SPEED)
     {
-        //do we need to do anything here?
+        //when new target speeds are set, reset the error integral
         pidCtrlLeft.resetSum();
         pidCtrlRight.resetSum();
     }

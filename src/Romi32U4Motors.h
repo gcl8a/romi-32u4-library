@@ -40,7 +40,7 @@
 class Romi32U4Motors
 {
 private:
-   enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED};
+   enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_POS};
    CTRL_MODE ctrlMode = CTRL_DIRECT;
    
 public:
@@ -123,6 +123,9 @@ public:
    int16_t targetSpeedLeft = 0;
    int16_t targetSpeedRight = 0;
 
+   int16_t targetPosLeft = 0;
+   int16_t targetPosRight = 0;
+
    volatile int16_t countLeft = 0;
    volatile int16_t countRight = 0;
 
@@ -177,11 +180,11 @@ public:
      * service routine for the encoders could not be started soon enough.  If
      * you get encoder errors, make sure you are not disabling interrupts for
      * extended periods of time in your code. */
-    bool checkErrorLeft();
+    //bool checkErrorLeft();
 
     /*! This function is just like checkErrorLeft() except it applies to
      *  the right-side encoder. */
-    bool checkErrorRight();
+    //bool checkErrorRight();
 
     void leftISR(void);
     void rightISR(void);

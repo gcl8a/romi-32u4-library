@@ -149,6 +149,15 @@ void Romi32U4Motors::motorISR(void)
     speedLeft = countLeft - prevCountLeft;
     prevCountLeft = countLeft;
 
+    if(ctrlMode == CTRL_POS)
+    {
+        if((prevCountLeft < targetPosLeft) != (countLeft < targetPosLeft))
+        {
+            targetSpeedLeft = 0;
+            ctrlMode = CTRL_DIRECT;
+        }
+    }
+
     speedRight = countRight - prevCountRight;
     prevCountRight = countRight;
 
