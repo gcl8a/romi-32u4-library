@@ -21,9 +21,9 @@ private:
     static bool isAttached;
 
 public:
-    static void Init(void);
-    static void Attach(void); //MUST USE PIN 5
-    void Detach(void);
-    void Write(uint16_t microseconds);
-    uint16_t SetMinMaxUS(uint16_t min, uint16_t max);
+    static void init(void);
+    static void attach(void); //MUST USE PIN 5
+    void detach(void);
+    void write(uint16_t microseconds);
+    uint16_t setMinMaxUS(uint16_t min, uint16_t max);
 };

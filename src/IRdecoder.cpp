@@ -4,28 +4,6 @@
 
 /* Interprets an IR remote with NEC encoding. See IRdecoder.h for more explanation. */
 
-uint8_t digitalPinToPCInterrupt(uint8_t pin)
-{
-  uint8_t pcInt = NOT_AN_INTERRUPT;
-
-#if defined(__AVR_ATmega32U4__)
-  switch(pin)
-  {
-    case 17: pcInt = PCINT0; break;
-    case 15: pcInt = PCINT1; break;
-    case 16: pcInt = PCINT2; break;
-    case 14: pcInt = PCINT3; break;
-    case  8: pcInt = PCINT4; break;
-    case  9: pcInt = PCINT5; break;
-    case 10: pcInt = PCINT6; break;
-    case 11: pcInt = PCINT7; break;
-    default: break;
-  }
-#endif
-
-  return pcInt;
-}
-
 void handleIRsensor(void)
 {
   decoder.handleIRsensor();

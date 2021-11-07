@@ -13,7 +13,7 @@
 
 bool Servo32U4::isAttached = false;
 
-void Servo32U4::Init(void)
+void Servo32U4::init(void)
 {
     cli();
     //set up Timer3 for 20ms rollover
@@ -28,34 +28,35 @@ void Servo32U4::Init(void)
     pinMode(5, OUTPUT); // set pin as OUTPUT
 }
 
-void Servo32U4::Attach(void) //MUST USE PIN 5
+void Servo32U4::attach(void) //MUST USE PIN 5
 {
-    Init();
+    init();
     cli();
     TCCR3A = 0x82; //set up OCR3A
     sei();
     isAttached = true;
 }
 
-void Servo32U4::Detach(void)
+void Servo32U4::detach(void)
 {
     cli();
     TCCR3A = 0x02; //cancel OCR3A
     sei();
 }
 
-void Servo32U4::Write(uint16_t microseconds)
+void Servo32U4::write(uint16_t microseconds)
 {
     if (!isAttached)
     {
-        Attach();
+        attach();
     }
+
     microseconds = constrain(microseconds, usMin, usMax);
     //prescaler is 8, so 1 timer count = 0.5 us
     OCR3A = microseconds << 1; //times 2
 }
 
-uint16_t Servo32U4::SetMinMaxUS(uint16_t min, uint16_t max)
+uint16_t Servo32U4::setMinMaxUS(uint16_t min, uint16_t max)
 {
     usMin = min;
     usMax = (max > min) ? max : min; //in case they're mixed up, just constrain to min
