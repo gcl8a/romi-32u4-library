@@ -37,9 +37,9 @@
  * revolution of a Romi wheel corresponds to 12*3952/33 (approximately 1437.09)
  * encoder counts as returned by this library.
  */
-class Romi32U4Motors
+class Romi32U4Motor
 {
-private:
+protected:
    enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_POS};
    CTRL_MODE ctrlMode = CTRL_DIRECT;
    
@@ -49,24 +49,7 @@ public:
      * \param effort A number from -300 to 300 representing the effort and
      * direction of the left motor.  Values of -300 or less result in full effort
      * reverse, and values of 300 or more result in full effort forward. */
-  void setLeftEffort(int16_t effort);
-
-  /** \brief Sets the effort for the right motor.
-     *
-     * \param effort A number from -300 to 300 representing the effort and
-     * direction of the right motor. Values of -300 or less result in full effort
-     * reverse, and values of 300 or more result in full effort forward. */
-  void setRightEffort(int16_t effort);
-
-  /** \brief Sets the effort for both motors.
-     *
-     * \param leftEffort A number from -300 to 300 representing the speed and
-     * direction of the right motor. Values of -300 or less result in full speed
-     * reverse, and values of 300 or more result in full speed forward.
-     * \param rightEffort A number from -300 to 300 representing the speed and
-     * direction of the right motor. Values of -300 or less result in full speed
-     * reverse, and values of 300 or more result in full speed forward. */
-  void setEfforts(int16_t leftEffort, int16_t rightEffort);
+  virtual void setEffort(int16_t effort) = 0;
 
   /** \brief Turns turbo mode on or off.
      *
@@ -81,23 +64,14 @@ public:
      *
      * \param turbo If true, turns turbo mode on.
      *   If false, turns turbo mode off. */
-  void allowTurbo(bool turbo);
+   void allowTurbo(bool turbo);
 
-  /** \brief returns the Max Effort for the motors
-     * 
-     * \return The maximum effort for the motors based on the turbo setting */
-  int16_t getMaxEffort();
-
-   Romi32U4Motors(void) : pidCtrlLeft(5, 0.2), pidCtrlRight(5, 0.2)
+   Romi32U4Motor(void) : pidCtrl(5, 0.2)
    {}
 
-  inline void init()
+  static void init()
   {
-    bool initialized = false;
-
-    if (!initialized)
     {
-      initialized = true;
       initMotors();
       initEncoders();
     }
@@ -105,44 +79,32 @@ public:
   
   inline void motorISR(void);
 
-private:
+protected:
 
-  void initMotors();
-  void initEncoders();
+  static void initMotors();
+  static void initEncoders();
+
   int16_t maxEffort = 300;
 
 public:
-   uint8_t readyToPID = 0;
+   static uint8_t readyToPID;
 
-   volatile int16_t prevCountLeft;
-   volatile int16_t prevCountRight;
+   volatile int16_t prevCount;
 
-   int16_t speedLeft;
-   int16_t speedRight;
+   int16_t speed;
 
-   int16_t targetSpeedLeft = 0;
-   int16_t targetSpeedRight = 0;
+   int16_t targetSpeed = 0;
 
-   int16_t targetPosLeft = 0;
-   int16_t targetPosRight = 0;
+   int16_t targetPos = 0;
 
-   volatile int16_t countLeft = 0;
-   volatile int16_t countRight = 0;
+   volatile int16_t count = 0;
 
-   volatile int16_t lastLeftA = 0;
-   volatile int16_t lastLeftB = 0;
+   volatile int16_t lastA = 0;
+   volatile int16_t lastB = 0;
 
-   volatile int16_t lastRightA = 0;
-   volatile int16_t lastRightB = 0;
+   volatile int16_t delta = 0;
 
-   volatile int16_t deltaLeft = 0;
-   volatile int16_t deltaRight = 0;
-
-   // volatile bool errorLeft;
-   // volatile bool errorRight;
-
-   PIDController pidCtrlLeft;
-   PIDController pidCtrlRight;
+   PIDController pidCtrl;
 
 public:
       /*! Returns the number of counts that have been detected from the left-side
@@ -153,45 +115,36 @@ public:
      * The count is returned as a signed 16-bit integer.  When the count goes
      * over 32767, it will overflow down to -32768.  When the count goes below
      * -32768, it will overflow up to 32767. */
-    int16_t getCountsLeft();
-
-    /*! This function is just like getCountsLeft() except it applies to the
-     *  right-side encoder. */
-    int16_t getCountsRight();
+    int16_t getCount();
+    int16_t resetCount();
 
     /*! This function is just like getCountsLeft() except it also clears the
      *  counts before returning.  If you call this frequently enough, you will
      *  not have to worry about the count overflowing. */
-    int16_t getCountsAndResetLeft();
+//    int16_t getCountsAndReset();
 
-    /*! This function is just like getCountsAndResetLeft() except it applies to
-     *  the right-side encoder. */
-    int16_t getCountsAndResetRight();
+    //void ISR(void);
+    inline void handleISR(bool newA, bool newB);
 
-    /*! This function returns true if an error was detected on the left-side
-     * encoder.  It resets the error flag automatically, so it will only return
-     * true if an error was detected since the last time checkErrorLeft() was
-     * called.
-     *
-     * If an error happens, it means that both of the encoder outputs changed at
-     * the same time from the perspective of the ISR, so the ISR was unable to
-     * tell what direction the motor was moving, and the encoder count could be
-     * inaccurate.  The most likely cause for an error is that the interrupt
-     * service routine for the encoders could not be started soon enough.  If
-     * you get encoder errors, make sure you are not disabling interrupts for
-     * extended periods of time in your code. */
-    //bool checkErrorLeft();
+    void updateSpeed(void);
+    void update(void);
 
-    /*! This function is just like checkErrorLeft() except it applies to
-     *  the right-side encoder. */
-    //bool checkErrorRight();
-
-    void leftISR(void);
-    void rightISR(void);
-
-    void updateMotors(void);
-
-    void setTargetSpeeds(int16_t left, int16_t right);
+    void setTargetSpeed(int16_t targetSpeed);
+    void MoveFor(int16_t amount, int16_t speed);
+    bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
 };
 
-extern Romi32U4Motors motors;
+class LeftMotor : public Romi32U4Motor
+{
+public:
+   void setEffort(int16_t effort);
+};
+
+class RightMotor : public Romi32U4Motor
+{
+public:
+   void setEffort(int16_t effort);
+};
+
+extern LeftMotor leftMotor;
+extern RightMotor rightMotor;

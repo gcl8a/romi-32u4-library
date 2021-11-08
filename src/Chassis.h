@@ -2,9 +2,14 @@
 
 #include <Arduino.h>
 #include <Romi32U4Motors.h>
+
     
 class Chassis
 {
+protected:
+    // Romi32U4Motor leftMotor;
+    // Romi32U4Motor rightMotor;
+
 protected:
     float cmPerEncoderTick = 7.0 * 3.14 / 1440.0;
     float wheelTrack = 14.7;
@@ -13,8 +18,8 @@ protected:
 public:
 //    static int8_t readyToPID;
 
-    enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_DRIVE_FOR, CTRL_TURN_FOR};
-    CTRL_MODE ctrlMode = CTRL_SPEED;
+    // enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_DRIVE_FOR, CTRL_TURN_FOR};
+    // CTRL_MODE ctrlMode = CTRL_SPEED;
 
     //used for driving/turning set amounts
     float currDist = 0;

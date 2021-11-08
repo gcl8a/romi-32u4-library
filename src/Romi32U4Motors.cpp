@@ -4,13 +4,20 @@
 #include <FastGPIO.h>
 #include <avr/io.h>
 
+LeftMotor leftMotor;
+RightMotor rightMotor;
+
+uint8_t Romi32U4Motor::readyToPID = 0;
+
 #define PWM_L 10
 #define PWM_R 9
 #define DIR_L 16
 #define DIR_R 15
 
+//NEED TO UNDO PIN 11?
+
 // initialize timer1 to generate the proper PWM outputs to the motor drivers
-void Romi32U4Motors::initMotors()
+void Romi32U4Motor::initMotors()
 {
     Serial.println("initMotors()");
 
@@ -42,8 +49,8 @@ void Romi32U4Motors::initMotors()
   
     //sets up timer 4
     TCCR4A = 0x00; //disable some functionality -- no need to worry about this
-    TCCR4B = 0x0B; //sets the prescaler -- look in the handout for values
-    TCCR4C = 0x04; //toggles pin 6 at the timer frequency
+    TCCR4B = 0x0B; //sets the prescaler 
+    //TCCR4C = 0x04; //toggles pin 6 at the timer frequency
     TCCR4D = 0x00; //normal mode
 
     OCR4C = 249;   //TOP goes in OCR4C 
@@ -55,7 +62,7 @@ void Romi32U4Motors::initMotors()
     Serial.println("/initMotors()");
 }
 
-void Romi32U4Motors::setLeftEffort(int16_t effort)
+void LeftMotor::setEffort(int16_t effort)
 {
     bool reverse = 0;
 
@@ -69,12 +76,11 @@ void Romi32U4Motors::setLeftEffort(int16_t effort)
         effort = maxEffort;
     }
 
-    OCR1B = effort;
-
-    FastGPIO::Pin<DIR_L>::setOutput(reverse);
+     OCR1B = effort;
+     FastGPIO::Pin<DIR_L>::setOutput(reverse);
 }
 
-void Romi32U4Motors::setRightEffort(int16_t effort)
+void RightMotor::setEffort(int16_t effort)
 {
     bool reverse = 0;
 
@@ -89,56 +95,43 @@ void Romi32U4Motors::setRightEffort(int16_t effort)
     }
 
     OCR1A = effort;
-
     FastGPIO::Pin<DIR_R>::setOutput(reverse);
 }
 
-void Romi32U4Motors::setEfforts(int16_t leftEffort, int16_t rightEffort)
-{
-    ctrlMode = CTRL_DIRECT;
-
-    setLeftEffort(leftEffort);
-    setRightEffort(rightEffort);
-}
-
-void Romi32U4Motors::allowTurbo(bool turbo)
+void Romi32U4Motor::allowTurbo(bool turbo)
 {
     maxEffort = turbo ? 400 : 300;
 }
 
-int16_t Romi32U4Motors::getMaxEffort()
-{
-    return maxEffort;
-}
-
-void Romi32U4Motors::updateMotors(void)
+void Romi32U4Motor::update(void)
 {
     if(ctrlMode == CTRL_SPEED || ctrlMode == CTRL_POS)
     {
-        int16_t effortLeft = pidCtrlLeft.calcEffort(targetSpeedLeft - speedLeft);
-        int16_t effortRight = pidCtrlRight.calcEffort(targetSpeedRight - speedRight);
-
-        setLeftEffort(effortLeft);
-        setRightEffort(effortRight);
+        int16_t effort = pidCtrl.calcEffort(targetSpeed - speed);
+        setEffort(effort);
     }
-
-    // if(ctrlMode == CTRL_POS)
-    // {
-    //     if(prevCountLeft > targetPosLeft )
-    // }
 }
 
-void Romi32U4Motors::setTargetSpeeds(int16_t left, int16_t right)
+void Romi32U4Motor::setTargetSpeed(int16_t target)
 {
-    targetSpeedLeft = left;
-    targetSpeedRight = right;
+    targetSpeed = target;
 
     if(ctrlMode != CTRL_SPEED)
     {
         //when new target speeds are set, reset the error integral
-        pidCtrlLeft.resetSum();
-        pidCtrlRight.resetSum();
+        pidCtrl.resetSum();
     }
 
     ctrlMode = CTRL_SPEED;
+}
+
+void Romi32U4Motor::MoveFor(int16_t amount, int16_t speed)
+{
+    setTargetSpeed(speed);
+    cli();
+    int16_t currPos = count;
+    sei();
+
+    targetPos = currPos + amount;
+    ctrlMode = CTRL_POS;
 }

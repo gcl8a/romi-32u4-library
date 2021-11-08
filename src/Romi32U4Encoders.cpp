@@ -14,104 +14,63 @@
 #define RIGHT_XOR  7
 #define RIGHT_B    23
 
-
-void Romi32U4Motors::leftISR()
+void leftISR()
 {
     bool newLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
     bool newLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ newLeftB;
 
-    countLeft += (lastLeftA ^ newLeftB) - (newLeftA ^ lastLeftB);
+    leftMotor.handleISR(newLeftA, newLeftB);
+}
+
+void rightISR()
+{
+    bool newRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
+    bool newRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ newRightB;
+
+    rightMotor.handleISR(newRightA, newRightB);
+}
+
+void Romi32U4Motor::handleISR(bool newA, bool newB)
+{
+    count += (lastA ^ newB) - (newA ^ lastB);
 
     // if((lastLeftA ^ newLeftA) & (lastLeftB ^ newLeftB))
     // {
     //     errorLeft = true;
     // }
 
-    lastLeftA = newLeftA;
-    lastLeftB = newLeftB;
+    lastA = newA;
+    lastB = newB;
+
+    if(ctrlMode == CTRL_POS)
+    {
+        if(count == targetPos)
+        {
+            setEffort(0);
+            ctrlMode = CTRL_DIRECT;
+        }
+    }
+
 }
 
-void Romi32U4Motors::rightISR()
+int16_t Romi32U4Motor::getCount()
 {
-    bool newRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
-    bool newRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ newRightB;
-
-    countRight += (lastRightA ^ newRightB) - (newRightA ^ lastRightB);
-
-    // if((lastRightA ^ newRightA) & (lastRightB ^ newRightB))
-    // {
-    //     errorRight = true;
-    // }
-
-    lastRightA = newRightA;
-    lastRightB = newRightB;
-}
-
-
-int16_t Romi32U4Motors::getCountsLeft()
-{
-    init();
-
     cli();
-    int16_t counts = countLeft;
+    int16_t tempCount = count;
     sei();
-    return counts;
+    return tempCount;
 }
 
-int16_t Romi32U4Motors::getCountsRight()
+int16_t Romi32U4Motor::resetCount(void)
 {
-    init();
-
     cli();
-    int16_t counts = countRight;
+    int16_t tempCount = count;
+    count = 0;
     sei();
-    return counts;
+    return tempCount;
 }
 
-int16_t Romi32U4Motors::getCountsAndResetLeft()
-{
-    init();
-
-    cli();
-    int16_t counts = countLeft;
-    countLeft = 0;
-    sei();
-    return counts;
-}
-
-int16_t Romi32U4Motors::getCountsAndResetRight()
-{
-    init();
-
-    cli();
-    int16_t counts = countRight;
-    countRight = 0;
-    sei();
-    return counts;
-}
-
-// bool Romi32U4Motors::checkErrorLeft()
-// {
-//     init();
-
-//     bool error = errorLeft;
-//     errorLeft = 0;
-//     return error;
-// }
-
-// bool Romi32U4Motors::checkErrorRight()
-// {
-//     init();
-
-//     bool error = errorRight;
-//     errorRight = 0;
-//     return error;
-// }
-
-void leftISR(void) {motors.leftISR();}
-void rightISR(void) {motors.rightISR();}
-
-void Romi32U4Motors::initEncoders(void)
+void Romi32U4Motor::initEncoders(void)
 {    
     Serial.println("initEncoders()");
     // Set the pins as pulled-up inputs.
@@ -131,43 +90,42 @@ void Romi32U4Motors::initEncoders(void)
     // Initialize the variables.  It's good to do this after enabling the
     // interrupts in case the interrupts fired by accident as we were enabling
     // them.
-    lastLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
-    lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
-    countLeft = 0;
-    //errorLeft = 0;
+    bool lastLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    bool lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
 
-    lastRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
-    lastRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ lastRightB;
-    countRight = 0;
-    //errorRight = 0;
+    leftMotor.handleISR(lastLeftA, lastLeftB);
+    leftMotor.resetCount();
+
+    bool lastRightB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    bool lastRightA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastRightB;
+
+    rightMotor.handleISR(lastRightA, lastRightB);
+    rightMotor.resetCount();
 
     Serial.println("/initEncoders()");
 }
 
-void Romi32U4Motors::motorISR(void) 
+void Romi32U4Motor::updateSpeed(void) 
 {
-    speedLeft = countLeft - prevCountLeft;
-    prevCountLeft = countLeft;
+    cli();
+    int16_t currCount = count;
+    sei();
+    speed = currCount - prevCount;
+    prevCount = currCount;
 
-    if(ctrlMode == CTRL_POS)
-    {
-        if((prevCountLeft < targetPosLeft) != (countLeft < targetPosLeft))
-        {
-            targetSpeedLeft = 0;
-            ctrlMode = CTRL_DIRECT;
-        }
-    }
-
-    speedRight = countRight - prevCountRight;
-    prevCountRight = countRight;
-
-    readyToPID = 1;
+    Serial.print(currCount);
+    Serial.print('\t');
+    Serial.print(targetPos);
+    Serial.print('\t');
 }
+
 /*
  * ISR for timing. On overflow, it takes a 'snapshot' of the encoder counts and raises a flag to let
  * the main program it is time to execute the PID calculations.
  */
 ISR(TIMER4_OVF_vect)
 {
-    motors.motorISR();
+    leftMotor.updateSpeed();
+    rightMotor.updateSpeed();
+    Romi32U4Motor::readyToPID++;
 }
