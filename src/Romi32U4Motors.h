@@ -1,4 +1,4 @@
-// Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
+// Adapted from a library by Pololu Corporation.  For more information, see http://www.pololu.com/
 
 /*! \file Romi32U4Motors.h */
 

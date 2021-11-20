@@ -1,4 +1,4 @@
-// Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
+// Adapted from a library by Pololu Corporation.  For more information, see http://www.pololu.com/
 
 #include <Romi32U4Motors.h>
 #include <FastGPIO.h>
@@ -10,11 +10,8 @@
 #define DIR_L 16
 #define DIR_R 15
 
-#define IR_EMITTER_PIN 11
+#define IR_EMITTER_PIN 11 // this should go elsewhere or disappear
 
-//NEED TO UNDO PIN 11?
-
-// initialize timer1 to generate the proper PWM outputs to the motor drivers
 /**
  * initMotors() should be called near the beginning of the program (usually in Chassis::init()).
  * It sets up Timer4 to run at 38 kHz, which is used to both drive the PWM signal for the motors
