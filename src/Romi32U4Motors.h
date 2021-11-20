@@ -20,20 +20,6 @@
  *
  * The encoders are monitored in the background using interrupts, so your code
  * can perform other tasks without missing encoder counts.
- *
- * To read the left encoder, this class uses an interrupt service routine (ISR)
- * for PCINT0_vect, so there will be a compile-time conflict with any other code
- * that defines a pin-change ISR.
- *
- * To read the right encoder, this class calls
- * [attachInterrupt()](http://arduino.cc/en/Reference/attachInterrupt), so there
- * will be a compile-time conflict with any other code that defines an ISR for
- * an external interrupt directly instead of using attachInterrupt().
- *
- * The standard Romi motors have a gear ratio of 3952:33 (approximately 120:1).
- * The standard Romi encoders give 12 counts per revolution.  Therefore, one
- * revolution of a Romi wheel corresponds to 12*3952/33 (approximately 1437.09)
- * encoder counts as returned by this library.
  */
 class Romi32U4Motor
 {
@@ -92,7 +78,6 @@ public:
    volatile int16_t prevCount;
 
    int16_t speed = 0;
-
    int16_t targetSpeed = 0;
 
    int16_t targetPos = 0;
