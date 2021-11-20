@@ -99,7 +99,6 @@ protected:
    void update(void);
    void calcEncoderDelta(void);
 
-
 public:
   /** \brief Turns turbo mode on or off.
      *
@@ -120,22 +119,26 @@ public:
     * Service function for the ISR
     * */
    inline void handleISR(bool newA, bool newB);
-
-   protected:
 };
 
 /**
  * Two derived classes, one for each motor. With the way Pololu controls the speeds, this
- * avoids ugly lookup tables.
+ * avoids ugly lookup tables (though it's not beautiful itself). Friended to Chassis so that
+ * setEffort() can't be called from main(). Use Chassis::setMotorEfforts() to set efforts, as 
+ * that will adjust the control mode properly.
  * */
 class LeftMotor : public Romi32U4Motor
 {
-public:
+protected:
    void setEffort(int16_t effort);
+
+   friend class Chassis;
 };
 
 class RightMotor : public Romi32U4Motor
 {
-public:
+protected:
    void setEffort(int16_t effort);
+
+   friend class Chassis;
 };
