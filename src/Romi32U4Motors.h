@@ -24,17 +24,83 @@
 class Romi32U4Motor
 {
 protected:
+   // Used to control the motors in different ways
    enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_POS};
    CTRL_MODE ctrlMode = CTRL_DIRECT;
-   
+
+   // this is the 'speed' of the motor, in "encoder counts / 16 ms interval"
+   volatile int16_t speed = 0;
+
+   // used to set target speed or position (or both)
+   int16_t targetSpeed = 0;
+   int16_t targetPos = 0;
+
+   // Maximum effort (to protect the gear boxes). Can be changed by setting turbo mode
+   int16_t maxEffort = 300;
+
+   // keeps track of encoder changes
+   volatile int16_t prevCount = 0;
+   volatile int16_t count = 0;
+   volatile int16_t lastA = 0;
+   volatile int16_t lastB = 0;
+
+   // We build a PID controller into the object for controlling speed
+   PIDController pidCtrl;
+
+   friend class Chassis;
+
 public:
-  /** \brief Sets the effort for the left motor.
-     *
-     * \param effort A number from -300 to 300 representing the effort and
-     * direction of the left motor.  Values of -300 or less result in full effort
-     * reverse, and values of 300 or more result in full effort forward. */
+   Romi32U4Motor(void) : pidCtrl(1, 0) {}
+
+   /**
+    * Must be called near the beginning of the program [usually in Chassis::init()]
+    * */
+   static void init()
+   {
+      initMotors();
+      initEncoders();
+   }
+
+   void setPIDCoeffients(float kp, float ki)
+   {
+      pidCtrl.setKp(kp);
+      pidCtrl.setKi(ki);
+   }
+
+protected:
+   // Used to set up motors and encoders. Do not call directly; they are called from init(), which 
+   // is called from Chassis::init()
+   static void initMotors();
+   static void initEncoders();
+
+   /** \brief Sets the effort for the motor directly. Overloaded for the left and right motors.
+   * Use Chassis::setEfforts() to control motors.
+   *
+   * \param effort A number from -300 to 300 representing the effort and
+   * direction of the left motor.  Values of -300 or less result in full effort
+   * reverse, and values of 300 or more result in full effort forward. */
   virtual void setEffort(int16_t effort) = 0;
 
+   /*! Returns the number of counts that have been detected from the left-side
+   * encoder.  These counts start at 0.  Positive counts correspond to forward
+   * movement of the left side of the Romi, while negative counts correspond
+   * to backwards movement.
+   *
+   * The count is returned as a signed 16-bit integer.  When the count goes
+   * over 32767, it will overflow down to -32768.  When the count goes below
+   * -32768, it will overflow up to 32767. */
+   int16_t getCount(void);
+   int16_t getAndResetCount(void);
+
+   void setTargetSpeed(int16_t targetSpeed);
+   void moveFor(int16_t amount, int16_t speed);
+   bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
+
+   void update(void);
+   void calcEncoderDelta(void);
+
+
+public:
   /** \brief Turns turbo mode on or off.
      *
      * By default turbo mode is off.  When turbo mode is on, the range of speeds
@@ -50,67 +116,12 @@ public:
      *   If false, turns turbo mode off. */
    void allowTurbo(bool turbo);
 
-   Romi32U4Motor(void) : pidCtrl(1, 0) {}
-
-   void setPIDCoeffients(float kp, float ki)
-   {
-      pidCtrl.setKp(kp);
-      pidCtrl.setKi(ki);
-   }
-
-   /**
-    * Must be called near the beginning of the program [usually in Chassis::init()]
+   /** 
+    * Service function for the ISR
     * */
-   static void init()
-   {
-      initMotors();
-      initEncoders();
-   }
+   inline void handleISR(bool newA, bool newB);
 
-protected:
-
-  static void initMotors();
-  static void initEncoders();
-
-  int16_t maxEffort = 300;
-
-public:
-   volatile int16_t prevCount;
-
-   int16_t speed = 0;
-   int16_t targetSpeed = 0;
-
-   int16_t targetPos = 0;
-
-   volatile int16_t count = 0;
-
-   volatile int16_t lastA = 0;
-   volatile int16_t lastB = 0;
-
-   volatile int16_t delta = 0;
-
-   PIDController pidCtrl;
-
-public:
-      /*! Returns the number of counts that have been detected from the left-side
-     * encoder.  These counts start at 0.  Positive counts correspond to forward
-     * movement of the left side of the Romi, while negative counts correspond
-     * to backwards movement.
-     *
-     * The count is returned as a signed 16-bit integer.  When the count goes
-     * over 32767, it will overflow down to -32768.  When the count goes below
-     * -32768, it will overflow up to 32767. */
-    int16_t getCount(void);
-    int16_t returnAndResetCount(void);
-
-    inline void handleISR(bool newA, bool newB);
-
-    void calcEncoderDelta(void);
-    void update(void);
-
-    void setTargetSpeed(int16_t targetSpeed);
-    void moveFor(int16_t amount, int16_t speed);
-    bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
+   protected:
 };
 
 /**

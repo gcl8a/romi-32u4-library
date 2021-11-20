@@ -47,13 +47,13 @@ void Romi32U4Motor::initEncoders(void)
     bool lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
 
     chassis.leftMotor.handleISR(lastLeftA, lastLeftB);
-    chassis.leftMotor.returnAndResetCount();
+    chassis.leftMotor.getAndResetCount();
 
     bool lastRightB = FastGPIO::Pin<LEFT_B>::isInputHigh();
     bool lastRightA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastRightB;
 
     chassis.rightMotor.handleISR(lastRightA, lastRightB);
-    chassis.rightMotor.returnAndResetCount();
+    chassis.rightMotor.getAndResetCount();
 
     Serial.println("/initEncoders()");
 }
@@ -72,7 +72,7 @@ int16_t Romi32U4Motor::getCount()
 /**
  * Resets the encoder count and returns the last count.
  * */
-int16_t Romi32U4Motor::returnAndResetCount(void)
+int16_t Romi32U4Motor::getAndResetCount(void)
 {
     cli();
     int16_t tempCount = count;

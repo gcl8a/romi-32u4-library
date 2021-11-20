@@ -40,6 +40,8 @@ public:
     void turnFor(float turnAngle, float turningSpeed, float forwardSpeed = 0);
 
     bool checkMotionComplete(void);
+
+    inline void updateEncoderDeltas();
 };
 
 extern Chassis chassis;
