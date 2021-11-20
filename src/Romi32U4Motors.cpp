@@ -119,6 +119,9 @@ void Romi32U4Motor::update(void)
     }
 }
 
+/**
+ * Sets the target speed in "encoder ticks/16 ms interval"
+ * */
 void Romi32U4Motor::setTargetSpeed(int16_t target)
 {
     targetSpeed = target;
@@ -132,6 +135,10 @@ void Romi32U4Motor::setTargetSpeed(int16_t target)
     ctrlMode = CTRL_SPEED;
 }
 
+/**
+ * Sets the (delta) target position in "encoder ticks" and a speed to drive to get there
+ * in "encoder ticks/16 ms interval"
+ * */
 void Romi32U4Motor::moveFor(int16_t amount, int16_t speed)
 {
     setTargetSpeed(speed);
