@@ -7,4 +7,4 @@
 #define  MIDDLE_LINE_SENSE A3
 #define  LEFT_LINE_SENSE A4
 
-#define SERVO_PIN 5
+#define SERVO_PIN 6

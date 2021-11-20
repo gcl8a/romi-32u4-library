@@ -3,12 +3,6 @@
 
 float PIDController::calcEffort(float error)
 {
-//    float error = target - current;
-//    return ComputeEffort(error);
-//}
-//
-//float PIDController::ComputeEffort(float error)
-//{
     currError = error; //store in case we want it later
     sumError += currError;
 

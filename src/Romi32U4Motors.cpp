@@ -136,9 +136,9 @@ void Romi32U4Motor::setTargetSpeed(int16_t target)
  * Sets the (delta) target position in "encoder ticks" and a speed to drive to get there
  * in "encoder ticks/16 ms interval"
  * */
-void Romi32U4Motor::moveFor(int16_t amount, int16_t speed)
+void Romi32U4Motor::moveFor(int16_t amount)
 {
-    setTargetSpeed(speed);
+    //setTargetSpeed(speed);
     cli();
     int16_t currPos = count;
     sei();

@@ -13,8 +13,10 @@
 void Chassis::init(void) 
 {
     Romi32U4Motor::init();
-    leftMotor.setPIDCoeffients(5, 0.2);
-    rightMotor.setPIDCoeffients(5, 0.2);
+
+    //these can be undone for the student to adjust
+    leftMotor.setPIDCoeffients(5, 0.5);
+    rightMotor.setPIDCoeffients(5, 0.5);
 
     // temporarily turn off interrupts while we set the time up
     noInterrupts();
@@ -43,8 +45,8 @@ void Chassis::loop(void)
     {
         readyToPID = 0;
 
-        leftMotor.update();
-        rightMotor.update();
+        // leftMotor.update();
+        // rightMotor.update();
 
         updatePose();
     }
@@ -73,12 +75,11 @@ void Chassis::updatePose(void)
     int16_t deltaLeft = leftMotor.speed;   
     int16_t deltaRight = rightMotor.speed;
 
-    ////////!!!!!!convert to actual distances...
     float prevDist = currDist;
     currDist += ((deltaLeft + deltaRight) / 2.0) * cmPerEncoderTick;
 
     float prevAngle = currAngle;
-    currAngle += ((deltaRight - deltaLeft) * cmPerEncoderTick / wheelTrack) * (180.0 / 3.14);
+    currAngle += ((deltaRight - deltaLeft) * cmPerEncoderTick / robotRadius) * (180.0 / 3.14);
 }
 
 void Chassis::setTwist(float forwardSpeed, float turningSpeed)
@@ -86,7 +87,7 @@ void Chassis::setTwist(float forwardSpeed, float turningSpeed)
     Serial.print("setting speed targets: \t");
 
     int16_t ticksPerIntervalFwd = (forwardSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
-    int16_t ticksPerIntervalTurn = (wheelTrack * 3.14 / 180.0) * 
+    int16_t ticksPerIntervalTurn = (robotRadius * 3.14 / 180.0) * 
                         (turningSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
 
     leftMotor.setTargetSpeed(ticksPerIntervalFwd - ticksPerIntervalTurn);
@@ -96,19 +97,24 @@ void Chassis::setTwist(float forwardSpeed, float turningSpeed)
 //need to fill these in
 void Chassis::driveFor(float forwardDistance, float forwardSpeed, float turningSpeed)
 {
-    leftMotor.moveFor(1440, 20);
-    rightMotor.moveFor(1440, 20);
+    setTwist(forwardSpeed, turningSpeed); //sets the speeds
+    int16_t delta = forwardDistance / cmPerEncoderTick;
+    leftMotor.moveFor(delta);
+    rightMotor.moveFor(delta);
 }
 
 void Chassis::turnFor(float turnAngle, float turningSpeed, float forwardSpeed)
 {
-    leftMotor.moveFor(-1440, -20);
-    rightMotor.moveFor(1440, 20);
+    setTwist(forwardSpeed, turningSpeed); //sets the speeds
+    int16_t delta = turnAngle * (robotRadius * 3.14 / 180.0) / cmPerEncoderTick;
+    leftMotor.moveFor(-delta);
+    rightMotor.moveFor(delta);
 }
 
 bool Chassis::checkMotionComplete(void)
 {
-    return leftMotor.checkComplete() && rightMotor.checkComplete();
+    bool complete = leftMotor.checkComplete() && rightMotor.checkComplete();
+    return complete;
 }
 
 /**
@@ -126,6 +132,10 @@ void Chassis::updateEncoderDeltas(void)
 {
     leftMotor.calcEncoderDelta();
     rightMotor.calcEncoderDelta();
+
+    leftMotor.update();
+    rightMotor.update();
+
     readyToPID++;
 }
     

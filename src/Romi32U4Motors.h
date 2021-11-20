@@ -93,7 +93,7 @@ protected:
    int16_t getAndResetCount(void);
 
    void setTargetSpeed(int16_t targetSpeed);
-   void moveFor(int16_t amount, int16_t speed);
+   void moveFor(int16_t amount);//, int16_t speed);
    bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
 
    void update(void);

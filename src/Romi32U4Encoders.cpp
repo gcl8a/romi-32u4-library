@@ -120,7 +120,6 @@ void Romi32U4Motor::handleISR(bool newA, bool newB)
             ctrlMode = CTRL_DIRECT;
         }
     }
-
 }
 
 /**

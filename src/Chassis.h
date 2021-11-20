@@ -12,9 +12,9 @@ public:
     RightMotor rightMotor;
 
 protected:
-    float cmPerEncoderTick = 7.0 * 3.14 / 1440.0;
-    float wheelTrack = 14.7;
-    uint16_t ctrlIntervalMS = 16;
+    const float cmPerEncoderTick = 7.0 * 3.14 / 1440.0;
+    const float robotRadius = 14.7 / 2.0;
+    const uint16_t ctrlIntervalMS = 16;
 
 public:
 
