@@ -25,6 +25,6 @@ private:
 public:
     void attach(void); //MUST USE PIN 6
     void detach(void);
-    void write(uint16_t microseconds);
+    void writeMicroseconds(uint16_t microseconds);
     uint16_t setMinMaxUS(uint16_t min, uint16_t max);
 };

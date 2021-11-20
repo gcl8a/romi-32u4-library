@@ -26,7 +26,7 @@ void Servo32U4::detach(void)
     isAttached = false;
 }
 
-void Servo32U4::write(uint16_t microseconds)
+void Servo32U4::writeMicroseconds(uint16_t microseconds)
 {
     if (!isAttached)
     {
@@ -35,7 +35,7 @@ void Servo32U4::write(uint16_t microseconds)
 
     microseconds = constrain(microseconds, usMin, usMax);
     //prescaler is 1024, so 1 timer count = 64 us
-    OCR3A = microseconds << 6; // divides by 64
+    OCR4D = microseconds >> 6; // divides by 64
 }
 
 uint16_t Servo32U4::setMinMaxUS(uint16_t min, uint16_t max)

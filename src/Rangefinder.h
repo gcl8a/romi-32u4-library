@@ -19,7 +19,7 @@ protected:
     volatile uint32_t pulseEnd = 0;
 
     // holds the last recorded distance
-    float distance = 0;
+    float distance = 99;
 
 public:
     Rangefinder(uint8_t echo, uint8_t trig);
