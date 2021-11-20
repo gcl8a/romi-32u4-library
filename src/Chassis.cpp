@@ -64,10 +64,10 @@ void Chassis::idle(void)
 /**
  * Sets the motor _efforts_.
  * */
-void Chassis::setMotorEfforts(int leftSpeed, int rightSpeed)
+void Chassis::setMotorEfforts(int leftEffort, int rightEffort)
 {
-    leftMotor.setEffort(leftSpeed);
-    rightMotor.setEffort(rightSpeed);
+    leftMotor.setMotorEffort(leftEffort);
+    rightMotor.setMotorEffort(rightEffort);
 }
 
 void Chassis::updatePose(void)

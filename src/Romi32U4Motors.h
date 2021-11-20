@@ -132,7 +132,14 @@ class LeftMotor : public Romi32U4Motor
 protected:
    void setEffort(int16_t effort);
 
-   friend class Chassis;
+public: 
+   void setMotorEffort(int16_t effort)
+   {
+      ctrlMode = CTRL_DIRECT;
+      setEffort(effort);
+   }
+
+//   friend class Chassis;
 };
 
 class RightMotor : public Romi32U4Motor
@@ -140,5 +147,11 @@ class RightMotor : public Romi32U4Motor
 protected:
    void setEffort(int16_t effort);
 
-   friend class Chassis;
+public:
+   void setMotorEffort(int16_t effort)
+   {
+      ctrlMode = CTRL_DIRECT;
+      setEffort(effort);
+   }
+//   friend class Chassis;
 };

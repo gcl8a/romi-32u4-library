@@ -33,7 +33,7 @@ public:
 
     void updatePose(void);
 
-    void setMotorEfforts(int leftSpeed, int rightSpeed);
+    void setMotorEfforts(int leftEffort, int rightEffort);
     void setTwist(float forwardSpeed, float turningSpeed);
 
     void driveFor(float forwardDistance, float forwardSpeed, float turningSpeed = 0);
