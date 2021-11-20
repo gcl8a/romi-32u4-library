@@ -1,21 +1,17 @@
 #include <servo32u4.h>
 
-bool Servo32U4::isAttached = false;
-
-void Servo32U4::init(void)
-{
-    pinMode(6, OUTPUT); // set pin as OUTPUT
-}
-
 void Servo32U4::attach(void) //MUST USE PIN 6!!
 {
-    init();
-    cli();
-    TCCR4C &= ~0xf0; 
+    pinMode(6, OUTPUT); // set pin as OUTPUT
 
-    // set the OCR4D bits (pin 6)
+    cli();
+
+    // clear then set the OCR4D bits (pin 6)
+    TCCR4C &= 0xf0; 
     TCCR4C |= 0x05;
+
     sei();
+
     isAttached = true;
 }
 
@@ -26,6 +22,7 @@ void Servo32U4::detach(void)
     // clear the OCR4D bits
     TCCR4C &= 0xf0; 
     sei();
+
     isAttached = false;
 }
 

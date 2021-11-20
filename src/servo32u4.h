@@ -20,11 +20,10 @@ private:
     uint16_t usMax = 2000;
 
     uint8_t feedbackPin = -1;
-    static bool isAttached;
+    bool isAttached = false;
 
 public:
-    static void init(void);
-    static void attach(void); //MUST USE PIN 6
+    void attach(void); //MUST USE PIN 6
     void detach(void);
     void write(uint16_t microseconds);
     uint16_t setMinMaxUS(uint16_t min, uint16_t max);
