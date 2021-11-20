@@ -1,7 +1,7 @@
 // Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
 
 #include <Arduino.h>
-#include <Romi32U4Motors.h>
+#include <wpi-32u4-lib.h>
 #include <FastGPIO.h>
 #include <avr/interrupt.h>
 
@@ -14,30 +14,100 @@
 #define RIGHT_XOR  7
 #define RIGHT_B    23
 
-void leftISR()
-{
-    bool newLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
-    bool newLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ newLeftB;
+// declared here to keep the compiler happy; defined at the bottom
+void leftISR(void);
+void rightISR(void);
 
-    leftMotor.handleISR(newLeftA, newLeftB);
+/**
+ * Set up the encoder 'machinery'. Call it near the beginning of the program.
+ * 
+ * Do not edit this function.
+ * */
+void Romi32U4Motor::initEncoders(void)
+{    
+    Serial.println("initEncoders()");
+    // Set the pins as pulled-up inputs.
+    FastGPIO::Pin<LEFT_XOR>::setInputPulledUp();
+    FastGPIO::Pin<LEFT_B>::setInputPulledUp();
+    FastGPIO::Pin<RIGHT_XOR>::setInputPulledUp();
+    FastGPIO::Pin<RIGHT_B>::setInputPulledUp();
+
+    //attach a PC interrupt
+    attachPCInt(PCINT4, leftISR); // pin change interrupts fire on CHANGE
+
+    // Enable interrupt on PE6 for the right encoder.  We use attachInterrupt
+    // instead of defining ISR(INT6_vect) ourselves so that this class will be
+    // compatible with other code that uses attachInterrupt.
+    attachInterrupt(4, rightISR, CHANGE);
+
+    // Initialize the variables.  It's good to do this after enabling the
+    // interrupts in case the interrupts fired as we were enabling
+    // them.
+    bool lastLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    bool lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
+
+    chassis.leftMotor.handleISR(lastLeftA, lastLeftB);
+    chassis.leftMotor.returnAndResetCount();
+
+    bool lastRightB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    bool lastRightA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastRightB;
+
+    chassis.rightMotor.handleISR(lastRightA, lastRightB);
+    chassis.rightMotor.returnAndResetCount();
+
+    Serial.println("/initEncoders()");
 }
 
-void rightISR()
+/**
+ * Returns the current encoder count.
+ * */
+int16_t Romi32U4Motor::getCount()
 {
-    bool newRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
-    bool newRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ newRightB;
-
-    rightMotor.handleISR(newRightA, newRightB);
+    cli();
+    int16_t tempCount = count;
+    sei();
+    return tempCount;
 }
 
+/**
+ * Resets the encoder count and returns the last count.
+ * */
+int16_t Romi32U4Motor::returnAndResetCount(void)
+{
+    cli();
+    int16_t tempCount = count;
+    count = 0;
+    sei();
+    return tempCount;
+}
+
+/**
+ * calcEncoderDelta() is called automatically by an ISR. It takes a 'snapshot of the encoders and 
+ * stores the change since the last call in speed, which has units of "encoder ticks/16 ms interval" 
+ * 
+ * Because it is called from within an ISR, interrupts don't need to be disabled.
+ * */
+void Romi32U4Motor::calcEncoderDelta(void) 
+{
+    int16_t currCount = count;
+    speed = currCount - prevCount;
+    prevCount = currCount;
+}
+
+/**
+ * Calculates the encoder counter increment/decrement due to an encoder transition. Pololu sets
+ * up their encoders in an interesting way with some logic chips, so first we have to deconvolute
+ * the encoder signals (in the ISR); then, we call this function to  update the counter. 
+ * 
+ * More details are found here:
+ * 
+ * https://www.pololu.com/docs/0J69/3.3
+ * 
+ * This function is called from the ISR, which does the actual deconvolution for each motor.
+ * */
 void Romi32U4Motor::handleISR(bool newA, bool newB)
 {
     count += (lastA ^ newB) - (newA ^ lastB);
-
-    // if((lastLeftA ^ newLeftA) & (lastLeftB ^ newLeftB))
-    // {
-    //     errorLeft = true;
-    // }
 
     lastA = newA;
     lastB = newB;
@@ -53,79 +123,24 @@ void Romi32U4Motor::handleISR(bool newA, bool newB)
 
 }
 
-int16_t Romi32U4Motor::getCount()
+/**
+ * ISR to update the encoder counter for the left motor.
+ * */
+void leftISR()
 {
-    cli();
-    int16_t tempCount = count;
-    sei();
-    return tempCount;
+    bool newLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    bool newLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ newLeftB;
+
+    chassis.leftMotor.handleISR(newLeftA, newLeftB);
 }
 
-int16_t Romi32U4Motor::resetCount(void)
+/**
+ * ISR to update the encoder counter for the left motor.
+ * */
+void rightISR()
 {
-    cli();
-    int16_t tempCount = count;
-    count = 0;
-    sei();
-    return tempCount;
-}
+    bool newRightB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
+    bool newRightA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ newRightB;
 
-void Romi32U4Motor::initEncoders(void)
-{    
-    Serial.println("initEncoders()");
-    // Set the pins as pulled-up inputs.
-    FastGPIO::Pin<LEFT_XOR>::setInputPulledUp();
-    FastGPIO::Pin<LEFT_B>::setInputPulledUp();
-    FastGPIO::Pin<RIGHT_XOR>::setInputPulledUp();
-    FastGPIO::Pin<RIGHT_B>::setInputPulledUp();
-
-    //attach a PC interrupt
-    attachPCInt(PCINT4, ::leftISR);
-
-    // Enable interrupt on PE6 for the right encoder.  We use attachInterrupt
-    // instead of defining ISR(INT6_vect) ourselves so that this class will be
-    // compatible with other code that uses attachInterrupt.
-    attachInterrupt(4, ::rightISR, CHANGE);
-
-    // Initialize the variables.  It's good to do this after enabling the
-    // interrupts in case the interrupts fired by accident as we were enabling
-    // them.
-    bool lastLeftB = FastGPIO::Pin<LEFT_B>::isInputHigh();
-    bool lastLeftA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastLeftB;
-
-    leftMotor.handleISR(lastLeftA, lastLeftB);
-    leftMotor.resetCount();
-
-    bool lastRightB = FastGPIO::Pin<LEFT_B>::isInputHigh();
-    bool lastRightA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ lastRightB;
-
-    rightMotor.handleISR(lastRightA, lastRightB);
-    rightMotor.resetCount();
-
-    Serial.println("/initEncoders()");
-}
-
-void Romi32U4Motor::updateSpeed(void) 
-{
-    cli();
-    int16_t currCount = count;
-    sei();
-    speed = currCount - prevCount;
-    prevCount = currCount;
-
-    Serial.print(currCount);
-    Serial.print('\t');
-    Serial.print(targetPos);
-    Serial.print('\t');
-}
-
-/*
- * ISR for timing. On overflow, it takes a 'snapshot' of the encoder counts and raises a flag to let
- * the main program it is time to execute the PID calculations.
- */
-ISR(TIMER4_OVF_vect)
-{
-    leftMotor.updateSpeed();
-    rightMotor.updateSpeed();
-    Romi32U4Motor::readyToPID++;
+    chassis.rightMotor.handleISR(newRightA, newRightB);
 }

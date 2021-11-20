@@ -4,11 +4,7 @@
 #include <FastGPIO.h>
 #include <avr/io.h>
 
-LeftMotor leftMotor;
-RightMotor rightMotor;
-
-uint8_t Romi32U4Motor::readyToPID = 0;
-
+// define the motor pins here
 #define PWM_L 10
 #define PWM_R 9
 #define DIR_L 16
@@ -28,7 +24,7 @@ void Romi32U4Motor::initMotors()
 
     FastGPIO::Pin<11>::setOutputLow(); //pin 11 for output C
 
-    noInterrupts(); //disable interupts while we mess with the Timer4 registers
+    noInterrupts(); //disable interupts while we set Timer4 registers
 
     // Timer 1 configuration
     // prescaler: clockI/O / 1
@@ -46,16 +42,6 @@ void Romi32U4Motor::initMotors()
     OCR1A = 0;
     OCR1B = 0;
     OCR1C = 0; //can be used to create 38 kHz signal on pin 11
-  
-    //sets up timer 4
-    TCCR4A = 0x00; //disable some functionality -- no need to worry about this
-    TCCR4B = 0x0B; //sets the prescaler 
-    //TCCR4C = 0x04; //toggles pin 6 at the timer frequency
-    TCCR4D = 0x00; //normal mode
-
-    OCR4C = 249;   //TOP goes in OCR4C 
-
-    TIMSK4 = 0x04; //enable overflow interrupt
     
     interrupts(); //re-enable interrupts
 
@@ -125,7 +111,7 @@ void Romi32U4Motor::setTargetSpeed(int16_t target)
     ctrlMode = CTRL_SPEED;
 }
 
-void Romi32U4Motor::MoveFor(int16_t amount, int16_t speed)
+void Romi32U4Motor::moveFor(int16_t amount, int16_t speed)
 {
     setTargetSpeed(speed);
     cli();

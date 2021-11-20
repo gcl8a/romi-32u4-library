@@ -3,12 +3,13 @@
 #include <Arduino.h>
 #include <Romi32U4Motors.h>
 
-    
 class Chassis
 {
-protected:
-    // Romi32U4Motor leftMotor;
-    // Romi32U4Motor rightMotor;
+public:
+    volatile uint8_t readyToPID = 0;
+
+    LeftMotor leftMotor;
+    RightMotor rightMotor;
 
 protected:
     float cmPerEncoderTick = 7.0 * 3.14 / 1440.0;
@@ -16,10 +17,6 @@ protected:
     uint16_t ctrlIntervalMS = 16;
 
 public:
-//    static int8_t readyToPID;
-
-    // enum CTRL_MODE {CTRL_DIRECT, CTRL_SPEED, CTRL_DRIVE_FOR, CTRL_TURN_FOR};
-    // CTRL_MODE ctrlMode = CTRL_SPEED;
 
     //used for driving/turning set amounts
     float currDist = 0;
