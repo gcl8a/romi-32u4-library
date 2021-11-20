@@ -87,11 +87,9 @@ protected:
   int16_t maxEffort = 300;
 
 public:
-   static uint8_t readyToPID;
-
    volatile int16_t prevCount;
 
-   int16_t speed;
+   int16_t speed = 0;
 
    int16_t targetSpeed = 0;
 
@@ -115,22 +113,16 @@ public:
      * The count is returned as a signed 16-bit integer.  When the count goes
      * over 32767, it will overflow down to -32768.  When the count goes below
      * -32768, it will overflow up to 32767. */
-    int16_t getCount();
-    int16_t resetCount();
+    int16_t getCount(void);
+    int16_t returnAndResetCount(void);
 
-    /*! This function is just like getCountsLeft() except it also clears the
-     *  counts before returning.  If you call this frequently enough, you will
-     *  not have to worry about the count overflowing. */
-//    int16_t getCountsAndReset();
-
-    //void ISR(void);
     inline void handleISR(bool newA, bool newB);
 
-    void updateSpeed(void);
+    void calcEncoderDelta(void);
     void update(void);
 
     void setTargetSpeed(int16_t targetSpeed);
-    void MoveFor(int16_t amount, int16_t speed);
+    void moveFor(int16_t amount, int16_t speed);
     bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
 };
 
@@ -146,5 +138,6 @@ public:
    void setEffort(int16_t effort);
 };
 
-extern LeftMotor leftMotor;
-extern RightMotor rightMotor;
+// trying without externs -- see Chassis
+// extern LeftMotor leftMotor;
+// extern RightMotor rightMotor;
