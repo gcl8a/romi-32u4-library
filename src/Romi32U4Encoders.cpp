@@ -1,7 +1,7 @@
 // Copyright Pololu Corporation.  For more information, see http://www.pololu.com/
 
 #include <Arduino.h>
-#include <wpi-32u4-lib.h>
+#include <Romi32U4Motors.h>
 #include <FastGPIO.h>
 #include <avr/interrupt.h>
 
