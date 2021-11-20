@@ -116,7 +116,7 @@ bool Chassis::checkMotionComplete(void)
  * */
 ISR(TIMER4_OVF_vect)
 {
-    chassis.leftMotor.updateSpeed();
-    chassis.rightMotor.updateSpeed();
+    chassis.leftMotor.calcEncoderDelta();
+    chassis.rightMotor.calcEncoderDelta();
     chassis.readyToPID++;
 }
