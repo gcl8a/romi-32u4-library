@@ -4,9 +4,9 @@
  * Call init() in your setup() routine. It sets up some internal timers so that the speed controllers
  * for the wheels will work properly.
  * 
- * The way it works, it starts a hardware timer on a 16 ms loop. Every time the timer "rolls over,"
- * an interrupt service routine (ISR) is called that updates the motor speeds and sets a flag to notify
- * the main program that it is time to calculate the control inputs.
+ * Here's how it works: Motor::init() starts a hardware timer on a 16 ms loop. Every time the timer 
+ * "rolls over," an interrupt service routine (ISR) is called that updates the motor speeds and 
+ * sets a flag to notify Chassis that it is time to calculate the control inputs.
  * 
  * When set up this way, pins 6, 12, and 13 cannot be used with analogWrite()
  * */
