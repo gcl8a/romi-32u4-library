@@ -13,6 +13,8 @@
 void Chassis::init(void) 
 {
     Romi32U4Motor::init();
+    leftMotor.setPIDCoeffients(5, 0.2);
+    rightMotor.setPIDCoeffients(5, 0.2);
 
     // temporarily turn off interrupts while we set the time up
     noInterrupts();

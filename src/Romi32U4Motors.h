@@ -8,8 +8,6 @@
 #include <stdint.h>
 #include <PIDController.h>
 
-//#include <FastGPIO.h>
-
 /*! \brief Controls motor effort and direction on the Romi 32U4.
  *
  * This library uses Timer 1, so it will conflict with any other libraries using
@@ -66,18 +64,22 @@ public:
      *   If false, turns turbo mode off. */
    void allowTurbo(bool turbo);
 
-   Romi32U4Motor(void) : pidCtrl(5, 0.2)
-   {}
+   Romi32U4Motor(void) : pidCtrl(1, 0) {}
 
-  static void init()
-  {
-    {
+   void setPIDCoeffients(float kp, float ki)
+   {
+      pidCtrl.setKp(kp);
+      pidCtrl.setKi(ki);
+   }
+
+   /**
+    * Must be called near the beginning of the program [usually in Chassis::init()]
+    * */
+   static void init()
+   {
       initMotors();
       initEncoders();
-    }
-  }
-  
-  inline void motorISR(void);
+   }
 
 protected:
 
@@ -126,6 +128,10 @@ public:
     bool checkComplete(void) {return ctrlMode == CTRL_DIRECT;}
 };
 
+/**
+ * Two derived classes, one for each motor. With the way Pololu controls the speeds, this
+ * avoids ugly lookup tables.
+ * */
 class LeftMotor : public Romi32U4Motor
 {
 public:
@@ -137,7 +143,3 @@ class RightMotor : public Romi32U4Motor
 public:
    void setEffort(int16_t effort);
 };
-
-// trying without externs -- see Chassis
-// extern LeftMotor leftMotor;
-// extern RightMotor rightMotor;
