@@ -19,11 +19,12 @@ void Chassis::init(void)
     // temporarily turn off interrupts while we set the time up
     noInterrupts();
 
-    //sets up timer 4 for a 16 ms loop, which triggers the motor PID controller
+    // sets up timer 4 for a 16 ms loop, which triggers the motor PID controller
+    // dt = 1024 (prescaler) * (249 + 1) / 16E6 (clock speed) = 16 ms
     TCCR4A = 0x00; //disable some functionality
-    TCCR4B = 0x0B; //sets the prescaler 
-    TCCR4C = 0x00; //
-    TCCR4D = 0x00; //normal mode
+    TCCR4B = 0x0B; //sets the prescaler to 1024
+    TCCR4C = 0x00; //disable outputs (overridden for the servo class)
+    TCCR4D = 0x00; //fast PWM mode (for servo)
 
     OCR4C = 249;   //TOP goes in OCR4C
 
