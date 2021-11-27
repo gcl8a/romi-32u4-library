@@ -96,16 +96,28 @@ void Chassis::setTwist(float forwardSpeed, float turningSpeed)
 //need to fill these in
 void Chassis::driveFor(float forwardDistance, float forwardSpeed)
 {
+    // ensure the speed and distance are in the same direction
+    forwardSpeed = forwardDistance > 0 ? fabs(forwardSpeed) : -fabs(forwardSpeed);
     setTwist(forwardSpeed, 0); //sets the speeds
+
+    // calculate the total motion in encoder ticks
     int16_t delta = forwardDistance / cmPerEncoderTick;
+
+    // set both wheels to move the same amount
     leftMotor.moveFor(delta);
     rightMotor.moveFor(delta);
 }
 
 void Chassis::turnFor(float turnAngle, float turningSpeed)
 {
-    setTwist(0, turningSpeed); //sets the speeds
+    // ensure angle and speed are in the same direction
+    turningSpeed = turnAngle > 0 ? fabs(turningSpeed) : -fabs(turningSpeed);
+    setTwist(0, turningSpeed);
+
+    // calculate the total motion in encoder ticks
     int16_t delta = turnAngle * (robotRadius * 3.14 / 180.0) / cmPerEncoderTick;
+
+    // set wheels to drive in opposite directions
     leftMotor.moveFor(-delta);
     rightMotor.moveFor(delta);
 }
