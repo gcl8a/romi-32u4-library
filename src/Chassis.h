@@ -12,19 +12,14 @@ public:
     RightMotor rightMotor;
 
 protected:
-    const float cmPerEncoderTick = 7.0 * 3.14 / 1440.0;
-    const float robotRadius = 14.7 / 2.0;
+    const float cmPerEncoderTick;
+    const float robotRadius;
     const uint16_t ctrlIntervalMS = 16;
 
-    //used for driving/turning set amounts
-    // float currDist = 0;
-    // float currAngle = 0;
-
-    // float targetDist = 0;
-    // float targetAngle = 0;
-
 public:
-    Chassis(void) {}
+    Chassis(float wheelDiam, float ticksPerRevolution, float wheelTrack) 
+        : cmPerEncoderTick(wheelDiam * M_PI / ticksPerRevolution), robotRadius(wheelTrack / 2.0)
+        {}
     void init(void);
     void setMotorPIDcoeffs(float kp, float ki);
 
@@ -41,7 +36,7 @@ public:
 
     inline void updateEncoderDeltas();
 protected:
-    void updatePose(void);
+    //void updatePose(void);
 };
 
 extern Chassis chassis;

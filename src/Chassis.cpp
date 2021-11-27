@@ -47,7 +47,7 @@ void Chassis::loop(void)
     if(readyToPID)
     {
         readyToPID = 0;
-        updatePose();
+        //updatePose();
     }
 }
 
@@ -69,17 +69,17 @@ void Chassis::setMotorEfforts(int leftEffort, int rightEffort)
     rightMotor.setMotorEffort(rightEffort);
 }
 
-void Chassis::updatePose(void)
-{
-    int16_t deltaLeft = leftMotor.speed;   
-    int16_t deltaRight = rightMotor.speed;
+// void Chassis::updatePose(void)
+// {
+//     int16_t deltaLeft = leftMotor.speed;   
+//     int16_t deltaRight = rightMotor.speed;
 
-    // float prevDist = currDist;
-    // currDist += ((deltaLeft + deltaRight) / 2.0) * cmPerEncoderTick;
+//     // float prevDist = currDist;
+//     // currDist += ((deltaLeft + deltaRight) / 2.0) * cmPerEncoderTick;
 
-    // float prevAngle = currAngle;
-    // currAngle += ((deltaRight - deltaLeft) * cmPerEncoderTick / robotRadius) * (180.0 / 3.14);
-}
+//     // float prevAngle = currAngle;
+//     // currAngle += ((deltaRight - deltaLeft) * cmPerEncoderTick / robotRadius) * (180.0 / 3.14);
+// }
 
 void Chassis::setTwist(float forwardSpeed, float turningSpeed)
 {
