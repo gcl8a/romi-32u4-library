@@ -33,6 +33,7 @@ public:
     void turnFor(float turnAngle, float turningSpeed);
 
     bool checkMotionComplete(void);
+    void printSpeeds(void);
 
     inline void updateEncoderDeltas();
 protected:

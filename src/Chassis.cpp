@@ -83,8 +83,6 @@ void Chassis::setMotorEfforts(int leftEffort, int rightEffort)
 
 void Chassis::setTwist(float forwardSpeed, float turningSpeed)
 {
-    Serial.print("setTwist()\n");
-
     int16_t ticksPerIntervalFwd = (forwardSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
     int16_t ticksPerIntervalTurn = (robotRadius * 3.14 / 180.0) * 
                         (turningSpeed * (ctrlIntervalMS / 1000.0)) / cmPerEncoderTick;
@@ -149,4 +147,11 @@ void Chassis::updateEncoderDeltas(void)
 
     readyToPID++;
 }
-    
+
+void Chassis::printSpeeds(void)
+{
+    Serial.print(leftMotor.targetSpeed);
+    Serial.print('\t');
+    Serial.print(leftMotor.speed);
+    Serial.print('\n');
+}
