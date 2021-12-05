@@ -19,17 +19,17 @@ void Rangefinder::init(void)
   // register the interrupt for the echo
   if(digitalPinToInterrupt(echoPin) != NOT_AN_INTERRUPT)
   {
-    Serial.println("Attaching ISR");
+    Serial.println("Attaching rangefinder ISR");
     attachInterrupt(digitalPinToInterrupt(echoPin), ::ISR_Rangefinder, CHANGE);
   }
   else if(digitalPinToPCInterrupt(echoPin) != NOT_AN_INTERRUPT)
   {
-    Serial.println("Attaching PC_ISR");
+    Serial.println("Attaching rangefinder PC_ISR");
     attachPCInt(digitalPinToPCInterrupt(echoPin), ::ISR_Rangefinder);
   }
   else
   {
-    Serial.println("Not an interrupt pin!");
+    Serial.println("Not a rangefinder interrupt pin!");
   }
 
   //control pin for commanding pings must be an output

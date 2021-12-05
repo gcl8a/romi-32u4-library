@@ -10,7 +10,7 @@ void Servo32U4::attach(void) //MUST USE PIN 5!!
     TCCR3A = 0x82; //WGM
     TCCR3B = 0x1A; //WGM + CS = 8
     ICR3 = 39999; //20ms
-    OCR3A = 3000; //default to 1500us
+    OCR3A = 3000; //default to neutral 1500us
 
     sei();
 
