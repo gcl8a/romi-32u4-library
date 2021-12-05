@@ -10,7 +10,7 @@ void Servo32U4::attach(void) //MUST USE PIN 5!!
     TCCR3A = 0x82; //WGM
     TCCR3B = 0x1A; //WGM + CS = 8
     ICR3 = 39999; //20ms
-    //OCR3A = 3000; //default to 1500us
+    OCR3A = 3000; //default to 1500us
 
     sei();
 
@@ -22,7 +22,7 @@ void Servo32U4::detach(void)
     cli();
 
     // clear the OCR3A bits
-    TCCR3A &= 0xfd; //cancel OCR3A
+    TCCR3A &= 0x7f; //cancel OCR3A
     sei();
 
     isAttached = false;
@@ -36,6 +36,7 @@ void Servo32U4::writeMicroseconds(uint16_t microseconds)
     }
 
     microseconds = constrain(microseconds, usMin, usMax);
+
     //prescaler is 8, so 1 timer count = 0.5 us
     OCR3A = microseconds << 1; // multiplies by 2
 }
