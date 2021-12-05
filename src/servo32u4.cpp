@@ -7,8 +7,8 @@ void Servo32U4::attach(void) //MUST USE PIN 6!!
     cli();
 
     // clear then set the OCR4D bits (pin 6)
-    // TCCR4C &= 0xf0; 
-    // TCCR4C |= 0x05;
+    TCCR4C &= 0xf0; 
+    TCCR4C |= 0x05;
 
     sei();
 
