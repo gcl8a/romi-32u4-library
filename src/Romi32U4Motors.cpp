@@ -105,7 +105,6 @@ void Romi32U4Motor::allowTurbo(bool turbo)
 
 /**
  * update() must be called regularly to update the control signals sent to the motors.
- * It should be called from Chassis::???
  * */
 void Romi32U4Motor::update(void)
 {
